@@ -1,16 +1,16 @@
 import PropTypes from 'prop-types';
 import XDate from 'xdate';
-import React, { useRef, useState, useEffect, useCallback } from 'react';
-import { View } from 'react-native';
+import React, {useRef, useState, useEffect, useCallback} from 'react';
+import {View} from 'react-native';
 // @ts-expect-error
-import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
+import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
 import constants from '../commons/constants';
-import { page, isGTE, isLTE, sameMonth } from '../dateutils';
-import { xdateToData, parseDate, toMarkingFormat } from '../interface';
-import { getState } from '../day-state-manager';
-import { extractComponentProps } from '../componentUpdater';
+import {page, isGTE, isLTE, sameMonth} from '../dateutils';
+import {xdateToData, parseDate, toMarkingFormat} from '../interface';
+import {getState} from '../day-state-manager';
+import {extractComponentProps} from '../componentUpdater';
 // @ts-expect-error
-import { WEEK_NUMBER } from '../testIDs';
+import {WEEK_NUMBER} from '../testIDs';
 import styleConstructor from './style';
 import CalendarHeader from './header';
 import Day from './day/index';
@@ -21,7 +21,7 @@ import BasicDay from './day/basic';
  * @gif: https://github.com/wix/react-native-calendars/blob/master/demo/assets/calendar.gif
  */
 const Calendar = (props) => {
-    const { initialDate, current, theme, disableMonthChange, allowSelectionOutOfRange, minDate, maxDate, onDayPress, onDayLongPress, hideExtraDays, markedDates, firstDay, showSixWeeks, customHeader, headerStyle, displayLoadingIndicator, testID, enableSwipeMonths, accessibilityElementsHidden, importantForAccessibility, onMonthChange, onVisibleMonthsChange, style: propsStyle } = props;
+    const {initialDate, current, theme, disableMonthChange, allowSelectionOutOfRange, minDate, maxDate, onDayPress, onDayLongPress, hideExtraDays, markedDates, firstDay, showSixWeeks, customHeader, headerStyle, displayLoadingIndicator, testID, enableSwipeMonths, accessibilityElementsHidden, importantForAccessibility, onMonthChange, onVisibleMonthsChange, style: propsStyle} = props;
     const [currentMonth, setCurrentMonth] = useState(current || initialDate ? parseDate(current || initialDate) : new XDate());
     const style = useRef(styleConstructor(theme));
     const header = useRef();
@@ -42,12 +42,12 @@ const Calendar = (props) => {
             isMounted.current = true;
         }
     }, [currentMonth]);
-    const updateMonth = (newMonth) => {
+    const updateMonth = useCallback((newMonth) => {
         if (sameMonth(newMonth, currentMonth)) {
             return;
         }
         setCurrentMonth(newMonth);
-    };
+    }, [currentMonth]);
     const addMonth = useCallback((count) => {
         const newMonth = currentMonth.clone().addMonths(count, true);
         updateMonth(newMonth);
@@ -82,7 +82,7 @@ const Calendar = (props) => {
         header.current?.onPressLeft();
     }, [header]);
     const onSwipe = useCallback((gestureName) => {
-        const { SWIPE_UP, SWIPE_DOWN, SWIPE_LEFT, SWIPE_RIGHT } = swipeDirections;
+        const {SWIPE_UP, SWIPE_DOWN, SWIPE_LEFT, SWIPE_RIGHT} = swipeDirections;
         switch (gestureName) {
             case SWIPE_UP:
             case SWIPE_DOWN:
@@ -97,7 +97,7 @@ const Calendar = (props) => {
     }, [onSwipeLeft, onSwipeRight]);
     const renderWeekNumber = (weekNumber) => {
         return (<View style={style.current.dayContainer} key={`week-container-${weekNumber}`}>
-        <BasicDay key={`week-${weekNumber}`} marking={{ disabled: true, disableTouchEvent: true }} 
+        <BasicDay key={`week-${weekNumber}`} marking={{disabled: true, disableTouchEvent: true}} 
         // state='disabled'
         theme={theme} testID={`${WEEK_NUMBER}-${weekNumber}`}>
           {weekNumber}
