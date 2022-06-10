@@ -36,7 +36,8 @@ export default class Agenda extends Component {
         renderKnob: PropTypes.func,
         selected: PropTypes.any,
         hideKnob: PropTypes.bool,
-        showClosingKnob: PropTypes.bool
+        showClosingKnob: PropTypes.bool,
+        onKnobDragStart: PropTypes.func,
     };
     style;
     viewHeight;
@@ -202,6 +203,7 @@ export default class Agenda extends Component {
     onStartDrag = () => {
         this.headerState = 'dragged';
         this.knobTracker.reset();
+        this.props.onKnobDragStart?.();
     };
     onSnapAfterDrag = (e) => {
         // on Android onTouchEnd is not called if dragging was started

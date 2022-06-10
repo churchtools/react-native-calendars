@@ -23,6 +23,8 @@ export declare type AgendaProps = CalendarListProps & ReservationListProps & {
     hideKnob?: boolean;
     /** Whether the knob should always be visible (when hideKnob = false) */
     showClosingKnob?: boolean;
+    /** Called when the knob is dragged. Use OnCalendarToggled for end of dragging **/
+    onKnobDragStart?: () => void;
 };
 declare type State = {
     scrollY: Animated.Value;
