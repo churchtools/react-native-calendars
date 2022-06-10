@@ -49,6 +49,8 @@ export type AgendaProps = CalendarListProps & ReservationListProps & {
   hideKnob?: boolean;
   /** Whether the knob should always be visible (when hideKnob = false) */
   showClosingKnob?: boolean;
+  /** Called when the knob is dragged. Use OnCalendarToggled for end of dragging **/
+  onKnobDragStart?: () => void;
 }
 
 type State = {
@@ -81,7 +83,8 @@ export default class Agenda extends Component<AgendaProps, State> {
     renderKnob: PropTypes.func,
     selected: PropTypes.any, //TODO: Should be renamed 'selectedDay' and inherited from ReservationList
     hideKnob: PropTypes.bool,
-    showClosingKnob: PropTypes.bool
+    showClosingKnob: PropTypes.bool,
+    onKnobDragStart: PropTypes.func,
   };
 
   private style: {[key: string]: ViewStyle};
@@ -286,6 +289,7 @@ export default class Agenda extends Component<AgendaProps, State> {
   onStartDrag = () => {
     this.headerState = 'dragged';
     this.knobTracker.reset();
+    this.props.onKnobDragStart?.();
   };
 
   onSnapAfterDrag = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
