@@ -3,7 +3,18 @@ import PropTypes from 'prop-types';
 import XDate from 'xdate';
 
 import React, {Component} from 'react';
-import {ActivityIndicator, View, FlatList, StyleProp, ViewStyle, TextStyle, NativeSyntheticEvent, NativeScrollEvent, LayoutChangeEvent} from 'react-native';
+import {
+  ActivityIndicator,
+  View,
+  FlatList,
+  StyleProp,
+  ViewStyle,
+  TextStyle,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
+  LayoutChangeEvent,
+  FlatListProps
+} from 'react-native';
 
 import {extractComponentProps} from '../../componentUpdater';
 import {sameDate} from '../../dateutils';
@@ -48,6 +59,8 @@ export type ReservationListProps = ReservationProps & {
   reservationsKeyExtractor?: (item: DayAgenda, index: number) => string;
   /** Set this to true to hide empty days*/
   hideEmptyDays?: boolean;
+  /** Flat-List onViewableItemsChanged callback */
+  onViewableItemsChanged?: FlatListProps<DayAgenda>["onViewableItemsChanged"]
 };
 
 interface DayAgenda {
@@ -81,7 +94,8 @@ class ReservationList extends Component<ReservationListProps, State> {
     refreshing: PropTypes.bool,
     onRefresh: PropTypes.func,
     reservationsKeyExtractor: PropTypes.func,
-    hideEmptyDays: PropTypes.bool
+    hideEmptyDays: PropTypes.bool,
+    onViewableItemsChanged: PropTypes.func,
   };
 
   static defaultProps = {
@@ -344,6 +358,7 @@ class ReservationList extends Component<ReservationListProps, State> {
         onScrollEndDrag={this.props.onScrollEndDrag}
         onMomentumScrollBegin={this.props.onMomentumScrollBegin}
         onMomentumScrollEnd={this.props.onMomentumScrollEnd}
+        onViewableItemsChanged={this.props.onViewableItemsChanged}
       />
     );
   }
