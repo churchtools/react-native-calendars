@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import XDate from 'xdate';
 import { Component } from 'react';
-import { StyleProp, ViewStyle, NativeSyntheticEvent, NativeScrollEvent, LayoutChangeEvent } from 'react-native';
+import { StyleProp, ViewStyle, NativeSyntheticEvent, NativeScrollEvent, LayoutChangeEvent, FlatListProps } from 'react-native';
 import { ReservationProps } from './reservation';
 import { AgendaEntry, AgendaSchedule } from '../../types';
 export declare type ReservationListProps = ReservationProps & {
@@ -38,6 +38,8 @@ export declare type ReservationListProps = ReservationProps & {
     reservationsKeyExtractor?: (item: DayAgenda, index: number) => string;
     /** Set this to true to hide empty days*/
     hideEmptyDays?: boolean;
+    /** Flat-List onViewableItemsChanged callback */
+    onViewableItemsChanged?: FlatListProps<DayAgenda>["onViewableItemsChanged"];
 };
 interface DayAgenda {
     reservation?: AgendaEntry;
@@ -65,13 +67,14 @@ declare class ReservationList extends Component<ReservationListProps, State> {
         onRefresh: PropTypes.Requireable<(...args: any[]) => any>;
         reservationsKeyExtractor: PropTypes.Requireable<(...args: any[]) => any>;
         hideEmptyDays: PropTypes.Requireable<boolean>;
+        onViewableItemsChanged: PropTypes.Requireable<(...args: any[]) => any>;
         date: PropTypes.Requireable<any>;
         item: PropTypes.Requireable<any>;
         theme: PropTypes.Requireable<object>;
         rowHasChanged: PropTypes.Requireable<(...args: any[]) => any>;
         renderDay: PropTypes.Requireable<(...args: any[]) => any>;
         renderItem: PropTypes.Requireable<(...args: any[]) => any>;
-        renderEmptyDate: PropTypes.Requireable<(...args: any[]) => any>; /** Called when the user stops dragging the agenda list **/
+        renderEmptyDate: PropTypes.Requireable<(...args: any[]) => any>;
     };
     static defaultProps: {
         refreshing: boolean;

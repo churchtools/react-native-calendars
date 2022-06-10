@@ -2,7 +2,7 @@ import XDate from 'xdate';
 import React, { Component } from 'react';
 import { FlatList, ViewStyle, LayoutChangeEvent, FlatListProps } from 'react-native';
 import { CalendarProps } from '../calendar';
-export interface CalendarListProps extends CalendarProps, Omit<FlatListProps<any>, 'data' | 'renderItem'> {
+export interface CalendarListProps extends CalendarProps, Omit<FlatListProps<any>, 'data' | 'renderItem' | 'onViewableItemsChanged'> {
     /** Max amount of months allowed to scroll to the past. Default = 50 */
     pastScrollRange?: number;
     /** Max amount of months allowed to scroll to the future. Default = 50 */

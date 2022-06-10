@@ -27,7 +27,8 @@ class ReservationList extends Component {
         refreshing: PropTypes.bool,
         onRefresh: PropTypes.func,
         reservationsKeyExtractor: PropTypes.func,
-        hideEmptyDays: PropTypes.bool
+        hideEmptyDays: PropTypes.bool,
+        onViewableItemsChanged: PropTypes.func,
     };
     static defaultProps = {
         refreshing: false,
@@ -232,7 +233,7 @@ class ReservationList extends Component {
                 return numAppointments >= 10;
             });
         }
-        return (<FlatList ref={this.list} style={style} contentContainerStyle={this.style.content} data={reservations} initialNumToRender={initialNumToRender} renderItem={this.renderRow} keyExtractor={this.keyExtractor} showsVerticalScrollIndicator={false} scrollEventThrottle={200} onMoveShouldSetResponderCapture={this.onMoveShouldSetResponderCapture} onScroll={this.onScroll} refreshControl={this.props.refreshControl} refreshing={this.props.refreshing} onRefresh={this.props.onRefresh} onScrollBeginDrag={this.props.onScrollBeginDrag} onScrollEndDrag={this.props.onScrollEndDrag} onMomentumScrollBegin={this.props.onMomentumScrollBegin} onMomentumScrollEnd={this.props.onMomentumScrollEnd}/>);
+        return (<FlatList ref={this.list} style={style} contentContainerStyle={this.style.content} data={reservations} initialNumToRender={initialNumToRender} renderItem={this.renderRow} keyExtractor={this.keyExtractor} showsVerticalScrollIndicator={false} scrollEventThrottle={200} onMoveShouldSetResponderCapture={this.onMoveShouldSetResponderCapture} onScroll={this.onScroll} refreshControl={this.props.refreshControl} refreshing={this.props.refreshing} onRefresh={this.props.onRefresh} onScrollBeginDrag={this.props.onScrollBeginDrag} onScrollEndDrag={this.props.onScrollEndDrag} onMomentumScrollBegin={this.props.onMomentumScrollBegin} onMomentumScrollEnd={this.props.onMomentumScrollEnd} onViewableItemsChanged={this.props.onViewableItemsChanged}/>);
     }
 }
 export default ReservationList;
