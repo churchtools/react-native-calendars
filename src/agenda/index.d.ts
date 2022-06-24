@@ -1,13 +1,14 @@
 import XDate from 'xdate';
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { Animated, LayoutChangeEvent, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
 import { DateData, AgendaSchedule } from '../types';
 import { CalendarListProps } from '../calendar-list';
-import ReservationList, { ReservationListProps } from './reservation-list';
+import { ReservationListProps } from './reservation-list';
+import { MarkingProps } from "../calendar/day/marking";
 export declare type AgendaProps = CalendarListProps & ReservationListProps & {
     /** the list of items that have to be displayed in agenda. If you want to render item as empty date
-    the value of date key kas to be an empty array []. If there exists no value for date key it is
-    considered that the date in question is not yet loaded */
+     the value of date key kas to be an empty array []. If there exists no value for date key it is
+     considered that the date in question is not yet loaded */
     items?: AgendaSchedule;
     /** callback that gets called when items for a certain month should be loaded (month became visible) */
     loadItemsForMonth?: (data: DateData) => void;
@@ -23,8 +24,6 @@ export declare type AgendaProps = CalendarListProps & ReservationListProps & {
     hideKnob?: boolean;
     /** Whether the knob should always be visible (when hideKnob = false) */
     showClosingKnob?: boolean;
-    /** Called when the knob is dragged. Use OnCalendarToggled for end of dragging **/
-    onKnobDragStart?: () => void;
 };
 declare type State = {
     scrollY: Animated.Value;
@@ -33,6 +32,7 @@ declare type State = {
     firstReservationLoad: boolean;
     selectedDay: XDate;
     topDay: XDate;
+    markedDates: Record<string, MarkingProps>;
 };
 /**
  * @description: Agenda component
@@ -55,13 +55,13 @@ export default class Agenda extends Component<AgendaProps, State> {
     private scrollPad;
     private calendar;
     private knob;
-    list: React.RefObject<ReservationList>;
     constructor(props: AgendaProps);
     componentDidMount(): void;
     componentWillUnmount(): void;
     componentDidUpdate(prevProps: AgendaProps, prevState: State): void;
-    static getDerivedStateFromProps(nextProps: AgendaProps): {
+    static getDerivedStateFromProps(nextProps: AgendaProps, previousState: State): {
         firstReservationLoad: boolean;
+        markedDates: Record<string, MarkingProps>;
     } | null;
     getSelectedDate(selected?: string): any;
     calendarOffset(): number;
@@ -72,7 +72,7 @@ export default class Agenda extends Component<AgendaProps, State> {
     loadReservations(props: AgendaProps): void;
     onDayPress: (d: DateData) => void;
     chooseDay(d: DateData, optimisticScroll: boolean): void;
-    generateMarkings: (this: any, selectedDay: any, markedDates: any, items: any) => any;
+    generateMarkings: (this: any, selectedDay: any, markedDates: any) => any;
     onScrollPadLayout: () => void;
     onCalendarListLayout: () => void;
     onLayout: (event: LayoutChangeEvent) => void;
