@@ -188,13 +188,14 @@ const Calendar = (props: CalendarProps) => {
       return <View key={id} style={style.current.emptyDayContainer} />;
     }
 
+    const markingFormat = toMarkingFormat(day);
     return (
       <View style={style.current.dayContainer} key={id}>
         <Day
           {...dayProps}
-          date={toMarkingFormat(day)}
+          date={markingFormat}
           state={getState(day, currentMonth, props)}
-          marking={markedDates?.[toMarkingFormat(day)]}
+          marking={markedDates?.[markingFormat]}
           onPress={onPressDay}
           onLongPress={onLongPressDay}
         />
