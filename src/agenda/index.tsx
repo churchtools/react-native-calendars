@@ -95,7 +95,6 @@ export default class Agenda extends Component<AgendaProps, State> {
   private scrollPad: React.RefObject<any> = React.createRef();
   private calendar: React.RefObject<CalendarList> = React.createRef();
   private knob: React.RefObject<View> = React.createRef();
-  public list: React.RefObject<ReservationList> = React.createRef();
 
   constructor(props: AgendaProps) {
     super(props);
@@ -115,7 +114,8 @@ export default class Agenda extends Component<AgendaProps, State> {
       calendarScrollable: false,
       firstReservationLoad: false,
       selectedDay: this.getSelectedDate(props.selected),
-      topDay: this.getSelectedDate(props.selected)
+      topDay: this.getSelectedDate(props.selected),
+      markedDates: {}
     };
 
     this.currentMonth = this.state.selectedDay.clone();
@@ -136,7 +136,7 @@ export default class Agenda extends Component<AgendaProps, State> {
 
   componentDidUpdate(prevProps: AgendaProps, prevState: State) {
     const newSelectedDate = this.getSelectedDate(this.props.selected);
-    
+
     if (!sameDate(newSelectedDate, prevState.selectedDay)) {
       const prevSelectedDate = this.getSelectedDate(prevProps.selected);
       if (!sameDate(newSelectedDate, prevSelectedDate)) {
@@ -147,9 +147,23 @@ export default class Agenda extends Component<AgendaProps, State> {
     }
   }
 
-  static getDerivedStateFromProps(nextProps: AgendaProps) {
+  static getDerivedStateFromProps(nextProps: AgendaProps, previousState) {
     if (nextProps.items) {
-      return {firstReservationLoad: false};
+      const state = {firstReservationLoad: false, markedDates: {}};
+
+      const {markedDates: previousMarked} = previousState;
+      Object.keys(nextProps.items).forEach(key => {
+        if (nextProps.items?.[key] && nextProps.items[key].length) {
+          if (previousMarked?.[key]?.marked && !('selected' in previousMarked?.[key])){
+            // Take old one, to keep reference of marking object => day is not rerendered
+            state.markedDates[key] = previousMarked[key];
+          } else {
+            state.markedDates[key] = {marked: true};
+          }
+        }
+      });
+
+      return state;
     }
     return null;
   }
@@ -183,7 +197,7 @@ export default class Agenda extends Component<AgendaProps, State> {
 
   enableCalendarScrolling(enable = true) {
     this.setState({calendarScrollable: enable});
-    
+
     this.props.onCalendarToggled?.(enable);
 
     // Enlarge calendarOffset here as a workaround on iOS to force repaint.
@@ -229,21 +243,11 @@ export default class Agenda extends Component<AgendaProps, State> {
     this.calendar?.current?.scrollToDay(day, this.calendarOffset(), true);
 
     this.props.loadItemsForMonth?.(xdateToData(day));
+
     this.props.onDayPress?.(xdateToData(day));
   }
 
-  generateMarkings = memoize((selectedDay, markedDates, items) => {
-    if (!markedDates) {
-      markedDates = {};
-      if (items) {
-        Object.keys(items).forEach(key => {
-          if (items[key] && items[key].length) {
-            markedDates[key] = {marked: true};
-          }
-        });
-      }
-    }
-
+  generateMarkings = memoize((selectedDay, markedDates) => {
     const key = toMarkingFormat(selectedDay);
     return {...markedDates, [key]: {...(markedDates[key] || {}), ...{selected: true}}};
   });
@@ -320,7 +324,7 @@ export default class Agenda extends Component<AgendaProps, State> {
   onDayChange = (day: XDate) => {
     const withAnimation = sameMonth(day, this.state.selectedDay);
     this.calendar?.current?.scrollToDay(day, this.calendarOffset(), withAnimation);
-    
+
     this.setState({selectedDay: day});
 
     this.props.onDayChange?.(xdateToData(day));
@@ -332,7 +336,6 @@ export default class Agenda extends Component<AgendaProps, State> {
     return (
       <ReservationList
         {...reservationListProps}
-        ref={this.list}
         selectedDay={this.state.selectedDay}
         topDay={this.state.topDay}
         onDayChange={this.onDayChange}
@@ -350,7 +353,7 @@ export default class Agenda extends Component<AgendaProps, State> {
         {...calendarListProps}
         ref={this.calendar}
         current={getCalendarDateString(this.currentMonth.toString())}
-        markedDates={this.generateMarkings(this.state.selectedDay, markedDates, items)}
+        markedDates={this.generateMarkings(this.state.selectedDay, markedDates ?? this.state.markedDates)}
         calendarWidth={this.viewWidth}
         scrollEnabled={this.state.calendarScrollable}
         hideExtraDays={shouldHideExtraDays}
@@ -378,9 +381,9 @@ export default class Agenda extends Component<AgendaProps, State> {
 
   renderWeekDaysNames = () => {
     return (
-      <WeekDaysNames 
-        firstDay={this.props.firstDay} 
-        style={this.style.dayHeader} 
+      <WeekDaysNames
+        firstDay={this.props.firstDay}
+        style={this.style.dayHeader}
       />
     );
   };
@@ -444,6 +447,8 @@ export default class Agenda extends Component<AgendaProps, State> {
       height: KNOB_HEIGHT,
       top: scrollPadPosition,
     };
+
+    console.log("LOG-d rendering agenda");
 
     return (
       <View testID={testID} onLayout={this.onLayout} style={[style, this.style.container]}>

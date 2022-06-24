@@ -150,6 +150,7 @@ class ReservationList extends Component<ReservationListProps, State> {
   getReservationsForDay(iterator: XDate, props: ReservationListProps) {
     const day = iterator.clone();
     const res = props.items?.[toMarkingFormat(day)];
+    const {hideEmptyDays} = props;
 
     if (res && res.length) {
       return res.map((reservation: AgendaEntry, i: number) => {
@@ -159,6 +160,9 @@ class ReservationList extends Component<ReservationListProps, State> {
         };
       });
     } else if (res) {
+      if (hideEmptyDays){
+        return [];
+      }
       return [
         {
           date: iterator.clone()
@@ -170,7 +174,6 @@ class ReservationList extends Component<ReservationListProps, State> {
   }
 
   getFutureReservations(from: XDate, props: ReservationListProps) {
-
     const reservationDates = Object.keys(props.items ?? {});
     if (reservationDates.length === 0) {
       return [];
@@ -220,7 +223,6 @@ class ReservationList extends Component<ReservationListProps, State> {
       if (res) {
         reservations = res;
       }
-      iterator.addDays(1);
     } else if (hideEmptyDays) {
       // When empty days are hidden and only few reservations exists, the next 31 days does not fill the screen.
       // Therefore load all future reservations. FlatList will render only the ones in the viewport.
@@ -278,13 +280,7 @@ class ReservationList extends Component<ReservationListProps, State> {
   };
 
   renderRow = ({item, index}: { item: DayAgenda; index: number }) => {
-    const {hideEmptyDays} = this.props;
     const reservationProps = extractComponentProps(Reservation, this.props);
-
-    if (hideEmptyDays && !item.reservation) {
-      return <View onLayout={this.onRowLayoutChange.bind(this, index)}/>;
-    }
-
     return (
         <View onLayout={this.onRowLayoutChange.bind(this, index)}>
           <Reservation {...reservationProps} item={item.reservation} date={item.date}/>
@@ -293,11 +289,11 @@ class ReservationList extends Component<ReservationListProps, State> {
   };
 
   keyExtractor = (item: DayAgenda, index: number) => {
-    return this.props.reservationsKeyExtractor?.(item, index) || `${item?.reservation?.day}${index}`;
+    return this.props.reservationsKeyExtractor?.(item, index) || `${item?.reservation?.day}-${index}`;
   }
 
   render() {
-    const {items, selectedDay, theme, style, hideEmptyDays} = this.props;
+    const {items, selectedDay, theme, style} = this.props;
     const {reservations} = this.state;
 
     if (!items || selectedDay && !items[toMarkingFormat(selectedDay)]) {
@@ -307,30 +303,13 @@ class ReservationList extends Component<ReservationListProps, State> {
       return <ActivityIndicator style={this.style.indicator} color={theme?.indicatorColor}/>;
     }
 
-    // Per default only 10 items are rendered initially. Because of navigation issues we have to render every day,
-    // although the day itself can be an empty component (which we do, if we hide empty days).
-    // If the first 10 days are empty, nothing will be shown, the user can't scroll and therefore the component is broken.
-    // Here we calculate the initial number to render such that the first 10 appointments are shown.
-    let initialNumToRender = 10;
-    if (hideEmptyDays){
-      initialNumToRender = 0;
-      let numAppointments = 0;
-      reservations.some(r => {
-        initialNumToRender++;
-        if (r.reservation){
-          numAppointments++;
-        }
-        return numAppointments >= 10;
-      });
-    }
-
     return (
       <FlatList
         ref={this.list}
         style={style}
         contentContainerStyle={this.style.content}
         data={reservations}
-        initialNumToRender={initialNumToRender}
+        initialNumToRender={10}
         renderItem={this.renderRow}
         keyExtractor={this.keyExtractor}
         showsVerticalScrollIndicator={false}
