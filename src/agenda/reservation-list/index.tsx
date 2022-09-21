@@ -5,12 +5,12 @@ import XDate from 'xdate';
 import React, {Component} from 'react';
 import {ActivityIndicator, View, FlatList, StyleProp, ViewStyle, TextStyle, NativeSyntheticEvent, NativeScrollEvent, LayoutChangeEvent} from 'react-native';
 
-import {extractComponentProps} from '../../componentUpdater';
+import {extractReservationProps} from '../../componentUpdater';
 import {sameDate} from '../../dateutils';
 import {toMarkingFormat} from '../../interface';
 import styleConstructor from './style';
 import Reservation, {ReservationProps} from './reservation';
-import {AgendaEntry, AgendaSchedule} from '../../types';
+import {AgendaEntry, AgendaSchedule, DayAgenda} from '../../types';
 
 
 export type ReservationListProps = ReservationProps & {
@@ -49,11 +49,6 @@ export type ReservationListProps = ReservationProps & {
   /** Set this to true to hide empty days*/
   hideEmptyDays?: boolean;
 };
-
-interface DayAgenda {
-  reservation?: AgendaEntry;
-  date?: XDate;
-}
 
 interface State {
   reservations: DayAgenda[];
@@ -279,7 +274,7 @@ class ReservationList extends Component<ReservationListProps, State> {
 
   renderRow = ({item, index}: { item: DayAgenda; index: number }) => {
     const {hideEmptyDays} = this.props;
-    const reservationProps = extractComponentProps(Reservation, this.props);
+    const reservationProps = extractReservationProps(Reservation, this.props);
 
     if (hideEmptyDays && !item.reservation) {
       return <View onLayout={this.onRowLayoutChange.bind(this, index)}/>;

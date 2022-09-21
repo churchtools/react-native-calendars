@@ -1,6 +1,10 @@
 import {ViewStyle, TextStyle} from 'react-native';
+import {MarkingProps} from './calendar/day/marking';
 
 export type MarkingTypes = 'dot' | 'multi-dot' | 'period' | 'multi-period' | 'custom';
+export type MarkedDates = {
+  [key: string]: MarkingProps;
+};
 export type DayState = 'selected' | 'disabled' | 'inactive' | 'today' | '';
 export type Direction = 'left' | 'right';
 export type DateData = {
@@ -11,16 +15,14 @@ export type DateData = {
   dateString: string;
 };
 export interface Theme {
-  container?: object;
+  timelineContainer?: object;
   contentStyle?: ViewStyle;
-  header?: object;
-  headerText?: object;
-  arrowButton?: object;
   event?: object;
   eventTitle?: object;
   eventSummary?: object;
   eventTimes?: object;
   line?: object;
+  verticalLine?: object;
   nowIndicatorLine?: object;
   nowIndicatorKnob?: object;
   timeLabel?: object;
@@ -36,7 +38,7 @@ export interface Theme {
   arrowColor?: string;
   textDisabledColor?: string;
   textInactiveColor?: string;
-  backgroundColor?: string;
+  backgroundColor?: string; //TODO: remove in V2
   dotColor?: string;
   selectedDotColor?: string;
   disabledArrowColor?: string;
@@ -53,15 +55,6 @@ export interface Theme {
   agendaDayNumColor?: string;
   agendaTodayColor?: string;
   agendaKnobColor?: string;
-  foregroundColor?: string;
-  separatorColor?: string;
-  processedColor?: string;
-  processingColor?: string;
-  failedColor?: string;
-  textSecondaryColor?: string;
-  textDefaultColor?: string;
-  textColor?: string;
-  textLinkColor?: string;
   todayButtonFontFamily?: TextStyle['fontFamily'];
   todayButtonFontWeight?: TextStyle['fontWeight'];
   todayButtonFontSize?: number;
@@ -109,4 +102,9 @@ export type AgendaEntry = {
 
 export type AgendaSchedule = {
   [date: string]: AgendaEntry[];
+}
+
+export interface DayAgenda {
+  reservation?: AgendaEntry;
+  date?: XDate;
 }

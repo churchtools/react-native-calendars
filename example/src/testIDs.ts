@@ -8,7 +8,8 @@ export default {
     AGENDA_HIDE_EMPTY: 'agenda_hide_empty_btn',
     EXPANDABLE_CALENDAR: 'expandable_calendar_btn',
     WEEK_CALENDAR: 'week_calendar_btn',
-    TIMELINE_CALENDAR: 'timeline_calendar_btn'
+    TIMELINE_CALENDAR: 'timeline_calendar_btn',
+    PLAYGROUND: 'playground_btn'
   },
   calendars: {
     CONTAINER: 'calendars',
