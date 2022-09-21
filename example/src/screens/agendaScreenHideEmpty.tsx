@@ -90,8 +90,6 @@ export default class AgendaScreenHideEmpty extends Component<State> {
     const fontSize = isFirst ? 16 : 14;
     const color = isFirst ? 'black' : '#43515c';
 
-    console.log("LOG.d renderItem", reservation);
-
     return (
       <TouchableOpacity
         testID={testIDs.agenda.ITEM}

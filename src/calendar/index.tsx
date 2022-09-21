@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import XDate from 'xdate';
 
-import React, {useRef, useState, useEffect, useCallback, useMemo} from 'react';
+import React, {useRef, useState, useEffect, useCallback, useMemo, FunctionComponent} from 'react';
 import {View, ViewStyle, StyleProp} from 'react-native';
 // @ts-expect-error
 import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
@@ -70,7 +70,7 @@ export interface CalendarProps extends CalendarHeaderProps, DayProps {
  * @example: https://github.com/wix/react-native-calendars/blob/master/example/src/screens/calendars.js
  * @gif: https://github.com/wix/react-native-calendars/blob/master/demo/assets/calendar.gif
  */
-const Calendar = (props: CalendarProps) => {
+const Calendar = React.memo((props: CalendarProps) => {
   const {
     initialDate,
     current,
@@ -191,12 +191,11 @@ const Calendar = (props: CalendarProps) => {
   };
 
   const renderDay = (day: XDate, id: number) => {
-    const dayProps = extractDayProps(props);
-
     if (!sameMonth(day, currentMonth) && hideExtraDays) {
       return <View key={id} style={style.current.emptyDayContainer}/>;
     }
 
+    const dayProps = extractDayProps(props);
     const dateString = toMarkingFormat(day);
 
     return (
@@ -246,8 +245,8 @@ const Calendar = (props: CalendarProps) => {
 
   const shouldDisplayIndicator = useMemo(() => {
     if (currentMonth) {
-      const lastMonthOfDay = toMarkingFormat(currentMonth.clone().addMonths(1, true).setDate(1).addDays(-1));
-      if (displayLoadingIndicator && !markedDates?.[lastMonthOfDay]) {
+      const lastDayOfMonth = toMarkingFormat(currentMonth.clone().addMonths(1, true).setDate(1).addDays(-1));
+      if (displayLoadingIndicator && !markedDates?.[lastDayOfMonth]) {
         return true;
       }
     }
@@ -275,7 +274,7 @@ const Calendar = (props: CalendarProps) => {
 
   const GestureComponent = enableSwipeMonths ? GestureRecognizer : View;
   const swipeProps = {
-    onSwipe: (direction: string) => onSwipe(direction)
+    onSwipe: useCallback((direction: string) => onSwipe(direction), []),
   };
   const gestureProps = enableSwipeMonths ? swipeProps : undefined;
 
@@ -291,7 +290,7 @@ const Calendar = (props: CalendarProps) => {
       </View>
     </GestureComponent>
   );
-};
+}) as FunctionComponent<CalendarProps>;
 
 export default Calendar;
 Calendar.displayName = 'Calendar';

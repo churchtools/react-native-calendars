@@ -236,7 +236,7 @@ const CalendarList = (props: CalendarListProps, ref: any) => {
       <CalendarListItem
         {...calendarProps}
         testID={testId}
-        markedDates={getMarkedDatesForItem(item)}
+        markedDates={markedDates}
         item={item}
         style={calendarStyle}
         // @ts-expect-error - type mismatch - ScrollView's 'horizontal' is nullable
@@ -247,7 +247,7 @@ const CalendarList = (props: CalendarListProps, ref: any) => {
         visible={isDateInRange(item)}
       />
     );
-  }, [horizontal, calendarStyle, calendarWidth, testID, getMarkedDatesForItem, isDateInRange, calendarProps]);
+  }, [horizontal, calendarStyle, calendarWidth, testID, markedDates, isDateInRange, calendarProps]);
 
   const renderStaticHeader = () => {
     if (staticHeader && horizontal) {
