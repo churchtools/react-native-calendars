@@ -35,3 +35,22 @@ export const useCombinedRefs = (...refs: React.Ref<any>[]) => {
 
   return targetRef;
 };
+
+
+
+export const useMemoCompare = <T>(next: T, compare: (oldVal: T|undefined, newVal: T) => boolean) => {
+  // Ref for storing previous value
+  const previousRef = useRef<T>();
+  const previous = previousRef.current;
+  // Pass previous and next value to compare function
+  // to determine whether to consider them equal.
+  // If not equal update previousRef to next value.
+  // We only update if not equal so that this hook continues to return
+  // the same old value if compare keeps returning true.
+  if (!compare(previous, next)){
+    previousRef.current = next;
+  }
+
+  // Finally, if equal then return the previous value
+  return previousRef.current;
+};

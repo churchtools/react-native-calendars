@@ -2,14 +2,14 @@ import findIndex from 'lodash/findIndex';
 import PropTypes from 'prop-types';
 import XDate from 'xdate';
 
-import React, {forwardRef, useImperativeHandle, useRef, useEffect, useState, useCallback, useMemo} from 'react';
+import React, {forwardRef, useImperativeHandle, useRef, useEffect, useState, useCallback, useMemo, memo} from 'react';
 import {FlatList, View, ViewStyle, FlatListProps} from 'react-native';
 
 import {extractHeaderProps, extractCalendarProps} from '../componentUpdater';
 import {xdateToData, parseDate, toMarkingFormat} from '../interface';
 import {page, sameDate, sameMonth} from '../dateutils';
 import constants from '../commons/constants';
-import {useDidUpdate} from '../hooks';
+import {useDidUpdate, useMemoCompare} from '../hooks';
 import styleConstructor from './style';
 import Calendar, {CalendarProps} from '../calendar';
 import CalendarListItem from './item';
@@ -105,7 +105,9 @@ const CalendarList = (props: CalendarListProps, ref: any) => {
     onEndReached
   } = props;
 
-  const calendarProps = extractCalendarProps(props);
+  const calendarProps = useMemoCompare(extractCalendarProps(props), (oldVal, newVal) => {
+    return !!oldVal && Object.keys(newVal).every((key) => oldVal[key as keyof ReturnType<typeof extractCalendarProps>] === newVal[key as keyof ReturnType<typeof extractCalendarProps>]);
+  });
   const headerProps = extractHeaderProps(props);
   const calendarSize = horizontal ? calendarWidth : calendarHeight;
 
@@ -320,7 +322,7 @@ const CalendarList = (props: CalendarListProps, ref: any) => {
   );
 };
 
-export default forwardRef(CalendarList);
+export default memo(forwardRef(CalendarList));
 CalendarList.displayName = 'CalendarList';
 CalendarList.propTypes = {
   ...Calendar.propTypes,
