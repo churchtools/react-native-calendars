@@ -2,7 +2,7 @@ import isFunction from 'lodash/isFunction';
 import PropTypes from 'prop-types';
 import XDate from 'xdate';
 
-import React, {Component} from 'react';
+import React, {Component, PureComponent} from 'react';
 import {ActivityIndicator, View, FlatList, StyleProp, ViewStyle, TextStyle, NativeSyntheticEvent, NativeScrollEvent, LayoutChangeEvent} from 'react-native';
 
 import {extractReservationProps} from '../../componentUpdater';
@@ -54,7 +54,7 @@ interface State {
   reservations: DayAgenda[];
 }
 
-class ReservationList extends Component<ReservationListProps, State> {
+class ReservationList extends PureComponent<ReservationListProps, State> {
   static displayName = 'ReservationList';
 
   static propTypes = {
@@ -274,7 +274,7 @@ class ReservationList extends Component<ReservationListProps, State> {
 
   renderRow = ({item, index}: { item: DayAgenda; index: number }) => {
     const {hideEmptyDays} = this.props;
-    const reservationProps = extractReservationProps(Reservation, this.props);
+    const reservationProps = extractReservationProps(this.props);
 
     if (hideEmptyDays && !item.reservation) {
       return <View onLayout={this.onRowLayoutChange.bind(this, index)}/>;

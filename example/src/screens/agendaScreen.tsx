@@ -57,8 +57,8 @@ export default class AgendaScreen extends Component<State> {
 
         if (!items[strTime]) {
           items[strTime] = [];
-          
-          const numItems = Math.floor(Math.random() * 3 + 1);
+
+          const numItems = Math.floor(Math.random() * 5 + 1);
           for (let j = 0; j < numItems; j++) {
             items[strTime].push({
               name: 'Item for ' + strTime + ' #' + j,
@@ -68,7 +68,7 @@ export default class AgendaScreen extends Component<State> {
           }
         }
       }
-      
+
       const newItems: AgendaSchedule = {};
       Object.keys(items).forEach(key => {
         newItems[key] = items[key];

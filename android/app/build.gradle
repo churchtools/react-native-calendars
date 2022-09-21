@@ -13,7 +13,8 @@ def enableSeparateBuildPerCPUArchitecture = false
 def enableProguardInReleaseBuilds = false
 
 def jscFlavor = 'org.webkit:android-jsc:+'
-def enableHermes = project.ext.react.get("enableHermes", false)
+// def enableHermes = project.ext.react.get("enableHermes", false)
+def enableHermes = false
 
 /**
  * Architectures to build native code for in debug.

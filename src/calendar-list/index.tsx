@@ -44,6 +44,10 @@ export interface CalendarListImperativeMethods {
   scrollToMonth: (date: XDate | string) => void;
 }
 
+function defaultKeyExtractor (_: any, index: number){
+  return String(index);
+}
+
 /**
  * @description: Calendar List component for both vertical and horizontal calendars
  * @extends: Calendar
@@ -90,7 +94,7 @@ const CalendarList = (props: CalendarListProps, ref: any) => {
     scrollEnabled = true,
     nestedScrollEnabled = true,
     scrollsToTop = false,
-    keyExtractor = (_: any, index: number) => String(index),
+    keyExtractor = defaultKeyExtractor,
     keyboardShouldPersistTaps,
     onScrollBeginDrag,
     onScrollEndDrag,
