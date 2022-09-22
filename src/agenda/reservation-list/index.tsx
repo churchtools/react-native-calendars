@@ -2,7 +2,7 @@ import isFunction from 'lodash/isFunction';
 import PropTypes from 'prop-types';
 import XDate from 'xdate';
 
-import React, {Component, PureComponent} from 'react';
+import React, {PureComponent} from 'react';
 import {ActivityIndicator, View, FlatList, StyleProp, ViewStyle, TextStyle, NativeSyntheticEvent, NativeScrollEvent, LayoutChangeEvent} from 'react-native';
 
 import {extractReservationProps} from '../../componentUpdater';

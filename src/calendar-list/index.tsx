@@ -2,7 +2,17 @@ import findIndex from 'lodash/findIndex';
 import PropTypes from 'prop-types';
 import XDate from 'xdate';
 
-import React, {forwardRef, useImperativeHandle, useRef, useEffect, useState, useCallback, useMemo, memo} from 'react';
+import React, {
+  forwardRef,
+  useImperativeHandle,
+  useRef,
+  useEffect,
+  useState,
+  useCallback,
+  useMemo,
+  memo,
+  FunctionComponent
+} from 'react';
 import {FlatList, View, ViewStyle, FlatListProps} from 'react-native';
 
 import {extractHeaderProps, extractCalendarProps} from '../componentUpdater';
@@ -200,15 +210,15 @@ const CalendarList = (props: CalendarListProps, ref: any) => {
     setCurrentMonth(day);
   }, [currentMonth, scrollToMonth]);
 
-  const getMarkedDatesForItem = useCallback((item?: XDate) => {
-    if (markedDates && item) {
-      for (const [key, _] of Object.entries(markedDates)) {
-        if (sameMonth(new XDate(key), new XDate(item))) {
-          return markedDates;
-        }
-      }
-    }
-  }, [markedDates]);
+  // const getMarkedDatesForItem = useCallback((item?: XDate) => {
+  //   if (markedDates && item) {
+  //     for (const [key, _] of Object.entries(markedDates)) {
+  //       if (sameMonth(new XDate(key), new XDate(item))) {
+  //         return markedDates;
+  //       }
+  //     }
+  //   }
+  // }, [markedDates]);
 
   const getItemLayout = useCallback((_: Array<XDate> | undefined | null, index: number) => {
     return {
@@ -322,7 +332,8 @@ const CalendarList = (props: CalendarListProps, ref: any) => {
   );
 };
 
-export default memo(forwardRef(CalendarList));
+// @ts-expect-error
+export default memo(forwardRef(CalendarList)) as FunctionComponent<CalendarListProps & {ref?: any}>;
 CalendarList.displayName = 'CalendarList';
 CalendarList.propTypes = {
   ...Calendar.propTypes,

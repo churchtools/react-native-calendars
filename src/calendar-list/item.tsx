@@ -1,12 +1,11 @@
 import XDate from 'xdate';
-import React, {useRef, useMemo, useContext, useCallback} from 'react';
+import React, {useRef, useMemo, useCallback} from 'react';
 import {Text} from 'react-native';
 import {Theme} from '../types';
 import {toMarkingFormat} from '../interface';
 import {extractCalendarProps} from '../componentUpdater';
 import styleConstructor from './style';
 import Calendar, {CalendarProps} from '../calendar';
-import CalendarContext from '../expandableCalendar/Context';
 
 export type CalendarListItemProps = CalendarProps & {
   item: any;
@@ -18,7 +17,7 @@ export type CalendarListItemProps = CalendarProps & {
   visible?: boolean;
 };
 
-const CalendarListItem = React.memo((props: CalendarListItemProps) => {  
+const CalendarListItem = React.memo((props: CalendarListItemProps) => {
   const {
     item,
     theme,
@@ -32,28 +31,27 @@ const CalendarListItem = React.memo((props: CalendarListItemProps) => {
     onPressArrowRight,
     visible
   } = props;
-  const context = useContext(CalendarContext);
 
   const style = useRef(styleConstructor(theme));
-  
+
   const calendarProps = extractCalendarProps(props);
   const dateString = toMarkingFormat(item);
-  
+
   const calendarStyle = useMemo(() => {
     return [
       {
         width: calendarWidth,
         minHeight: calendarHeight
-      }, 
+      },
       style.current.calendar,
       propsStyle
     ];
   }, [calendarWidth, calendarHeight, propsStyle]);
-  
+
   const textStyle = useMemo(() => {
     return [calendarStyle, style.current.placeholderText];
   }, [calendarStyle]);
-  
+
   const _onPressArrowLeft = useCallback((method: () => void, month?: XDate) => {
     const monthClone = month?.clone();
     if (monthClone) {
@@ -100,7 +98,6 @@ const CalendarListItem = React.memo((props: CalendarListItemProps) => {
       disableMonthChange
       onPressArrowLeft={horizontal ? _onPressArrowLeft : onPressArrowLeft}
       onPressArrowRight={horizontal ? _onPressArrowRight : onPressArrowRight}
-      context={context} // ???
     />
   );
 });
