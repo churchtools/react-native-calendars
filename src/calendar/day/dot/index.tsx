@@ -1,58 +1,50 @@
-import PropTypes from 'prop-types';
-import React, {useRef} from 'react';
+import React, {useMemo, useRef} from 'react';
 import {View} from 'react-native';
 import styleConstructor from './style';
 import {Theme} from '../../../types';
 
 export interface DotProps {
-  theme?: Theme;
-  color?: string;
-  marked?: boolean;
-  selected?: boolean;
-  disabled?: boolean;
-  inactive?: boolean;
-  today?: boolean;
+    theme?: Theme;
+    color?: string;
+    marked?: boolean;
+    selected?: boolean;
+    disabled?: boolean;
+    inactive?: boolean;
+    today?: boolean;
 }
 
-const Dot = ({theme, marked, disabled, inactive, color, today, selected}: DotProps) => {
-  const style = useRef(styleConstructor(theme));
-  const dotStyle = [style.current.dot] as object[];
+const Dot = React.memo(({theme, marked, disabled, inactive, color, today, selected}: DotProps) => {
+    const style = useRef(styleConstructor(theme));
+    const dotStyle = useMemo(() => {
+        const newStyle = [style.current.dot] as object[];
+        if (!marked) {
+            return newStyle;
+        }
+        newStyle.push(style.current.visibleDot);
 
-  if (marked) {
-    dotStyle.push(style.current.visibleDot);
+        if (today) {
+            newStyle.push(style.current.todayDot);
+        }
 
-    if (today) {
-      dotStyle.push(style.current.todayDot);
-    }
+        if (disabled) {
+            newStyle.push(style.current.disabledDot);
+        }
 
-    if (disabled) {
-      dotStyle.push(style.current.disabledDot);
-    }
+        if (inactive) {
+            newStyle.push(style.current.inactiveDot);
+        }
 
-    if (inactive) {
-      dotStyle.push(style.current.inactiveDot);
-    }
+        if (selected) {
+            newStyle.push(style.current.selectedDot);
+        }
 
-    if (selected) {
-      dotStyle.push(style.current.selectedDot);
-    }
+        if (color) {
+            newStyle.push({backgroundColor: color});
+        }
+        return newStyle;
+    }, [marked, today, disabled, inactive, selected,color]);
 
-    if (color) {
-      dotStyle.push({backgroundColor: color});
-    }
-  }
-
-  return <View style={dotStyle} />;
-};
+    return <View style={dotStyle}/>;
+});
 
 export default Dot;
-
-Dot.propTypes = {
-  theme: PropTypes.object,
-  color: PropTypes.string,
-  marked: PropTypes.bool,
-  selected: PropTypes.bool,
-  disabled: PropTypes.bool,
-  inactive: PropTypes.bool,
-  today: PropTypes.bool
-};

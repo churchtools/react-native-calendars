@@ -2,7 +2,7 @@ import isFunction from 'lodash/isFunction';
 import PropTypes from 'prop-types';
 import XDate from 'xdate';
 
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import {
   ActivityIndicator,
   View,
@@ -16,12 +16,12 @@ import {
   FlatListProps
 } from 'react-native';
 
-import {extractComponentProps} from '../../componentUpdater';
+import {extractReservationProps} from '../../componentUpdater';
 import {sameDate} from '../../dateutils';
 import {toMarkingFormat} from '../../interface';
 import styleConstructor from './style';
 import Reservation, {ReservationProps} from './reservation';
-import {AgendaEntry, AgendaSchedule} from '../../types';
+import {AgendaEntry, AgendaSchedule, DayAgenda} from '../../types';
 
 
 export type ReservationListProps = ReservationProps & {
@@ -63,16 +63,11 @@ export type ReservationListProps = ReservationProps & {
   onViewableItemsChanged?: FlatListProps<DayAgenda>["onViewableItemsChanged"]
 };
 
-interface DayAgenda {
-  reservation?: AgendaEntry;
-  date?: XDate;
-}
-
 interface State {
   reservations: DayAgenda[];
 }
 
-class ReservationList extends Component<ReservationListProps, State> {
+class ReservationList extends PureComponent<ReservationListProps, State> {
   static displayName = 'ReservationList';
 
   static propTypes = {
@@ -294,7 +289,13 @@ class ReservationList extends Component<ReservationListProps, State> {
   };
 
   renderRow = ({item, index}: { item: DayAgenda; index: number }) => {
-    const reservationProps = extractComponentProps(Reservation, this.props);
+    const {hideEmptyDays} = this.props;
+    const reservationProps = extractReservationProps(this.props);
+
+    if (hideEmptyDays && !item.reservation) {
+      return <View onLayout={this.onRowLayoutChange.bind(this, index)}/>;
+    }
+
     return (
         <View onLayout={this.onRowLayoutChange.bind(this, index)}>
           <Reservation {...reservationProps} item={item.reservation} date={item.date}/>

@@ -1,9 +1,9 @@
 import filter from 'lodash/filter';
-import React, {useRef} from 'react';
+import React, {FunctionComponent, useRef} from 'react';
 import {View, ViewStyle, TextStyle, StyleProp} from 'react-native';
 
 import {Theme, MarkingTypes} from '../../../types';
-import {extractComponentProps} from '../../../componentUpdater';
+import {extractDotProps} from '../../../componentUpdater';
 import styleConstructor from './style';
 import Dot, {DotProps} from '../dot';
 
@@ -58,7 +58,8 @@ export interface MarkingProps extends DotProps {
   customStyles?: CustomStyle;
 }
 
-const Marking = (props: MarkingProps) => {
+// @ts-expect-error
+const Marking: FunctionComponent<MarkingProps> & {markings: typeof Markings} = React.memo((props: MarkingProps) => {
   const {theme, type, dots, periods, selected, dotColor} = props;
   const style = useRef(styleConstructor(theme));
 
@@ -108,7 +109,7 @@ const Marking = (props: MarkingProps) => {
   };
 
   const renderDot = (index?: number, item?: any) => {
-    const dotProps = extractComponentProps(Dot, props);
+    const dotProps = extractDotProps(props);
     let key = index;
     let color = dotColor;
 
@@ -123,7 +124,7 @@ const Marking = (props: MarkingProps) => {
   };
 
   return renderMarkingByType();
-};
+});
 
 export default Marking;
 Marking.displayName = 'Marking';

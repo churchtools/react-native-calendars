@@ -1,13 +1,11 @@
-import XDate from 'xdate';
-import values from 'lodash/values';
-import PropTypes from 'prop-types';
-import React, {Fragment, useCallback, useRef} from 'react';
+import React, {Fragment, useCallback, useMemo, useRef} from 'react';
 import {TouchableOpacity, Text, View, ViewProps} from 'react-native';
 
 import {xdateToData} from '../../../interface';
 import {Theme, DayState, MarkingTypes, DateData} from '../../../types';
 import styleConstructor from './style';
 import Marking, {MarkingProps} from '../marking';
+import {useMemoCompare} from "../../../hooks";
 
 
 export interface BasicDayProps extends ViewProps {
@@ -36,7 +34,9 @@ export interface BasicDayProps extends ViewProps {
   accessibilityLabel?: string;
 }
 
-const BasicDay = (props: BasicDayProps) => {
+const emptyObject = {};
+
+const BasicDay = React.memo((props: BasicDayProps) => {
   const {
     theme,
     date,
@@ -52,7 +52,7 @@ const BasicDay = (props: BasicDayProps) => {
     testID
   } = props;
   const style = useRef(styleConstructor(theme));
-  const _marking = marking || {};
+  const _marking = marking || emptyObject as MarkingProps;
   const isSelected = _marking.selected || state === 'selected';
   const isDisabled = typeof _marking.disabled !== 'undefined' ? _marking.disabled : state === 'disabled';
   const isInactive = _marking?.inactive;
@@ -60,7 +60,7 @@ const BasicDay = (props: BasicDayProps) => {
   const isMultiDot = markingType === Marking.markings.MULTI_DOT;
   const isMultiPeriod = markingType === Marking.markings.MULTI_PERIOD;
   const isCustom = markingType === Marking.markings.CUSTOM;
-  const dateData = date ? xdateToData(new XDate(date)) : undefined;
+  const dateData = useMemoCompare(date ? xdateToData(date) : undefined, ((oldVal, newVal) => oldVal?.timestamp === newVal?.timestamp));
 
   const shouldDisableTouchEvent = () => {
     const {disableTouchEvent} = _marking;
@@ -76,7 +76,7 @@ const BasicDay = (props: BasicDayProps) => {
     return disableTouch;
   };
 
-  const getContainerStyle = () => {
+  const containerStyle = useMemo(() => {
     const {customStyles, selectedColor} = _marking;
     const styles = [style.current.base];
 
@@ -90,7 +90,7 @@ const BasicDay = (props: BasicDayProps) => {
     }
 
     //Custom marking type
-    if (isCustom && customStyles && customStyles.container) {
+    if (isCustom && customStyles?.container) {
       if (customStyles.container.borderRadius === undefined) {
         customStyles.container.borderRadius = 16;
       }
@@ -98,9 +98,9 @@ const BasicDay = (props: BasicDayProps) => {
     }
 
     return styles;
-  };
+  }, [_marking, isSelected, isToday, isCustom]);
 
-  const getTextStyle = () => {
+  const textStyle = useMemo(() => {
     const {customStyles, selectedTextColor} = _marking;
     const styles = [style.current.text];
 
@@ -123,15 +123,15 @@ const BasicDay = (props: BasicDayProps) => {
     }
 
     return styles;
-  };
+  }, [_marking, isSelected, isDisabled, isToday, isInactive, isCustom]);
 
   const _onPress = useCallback(() => {
     onPress?.(dateData);
-  }, [onPress, date]);
+  }, [onPress, dateData]);
 
   const _onLongPress = useCallback(() => {
     onLongPress?.(dateData);
-  }, [onLongPress, date]);
+  }, [onLongPress, dateData]);
 
   const renderMarking = () => {
     const {marked, dotColor, dots, periods} = _marking;
@@ -154,7 +154,7 @@ const BasicDay = (props: BasicDayProps) => {
 
   const renderText = () => {
     return (
-      <Text allowFontScaling={false} style={getTextStyle()}>
+      <Text allowFontScaling={false} style={textStyle}>
         {String(children)}
       </Text>
     );
@@ -175,7 +175,7 @@ const BasicDay = (props: BasicDayProps) => {
     return (
       <TouchableOpacity
         testID={testID}
-        style={getContainerStyle()}
+        style={containerStyle}
         disabled={shouldDisableTouchEvent()}
         activeOpacity={activeOpacity}
         onPress={!shouldDisableTouchEvent() ? _onPress : undefined}
@@ -199,18 +199,7 @@ const BasicDay = (props: BasicDayProps) => {
   };
 
   return isMultiPeriod ? renderPeriodsContainer() : renderContainer();
-};
+});
 
 export default BasicDay;
 BasicDay.displayName = 'BasicDay';
-BasicDay.propTypes = {
-  state: PropTypes.oneOf(['selected', 'disabled', 'inactive', 'today', '']),
-  marking: PropTypes.any,
-  markingType: PropTypes.oneOf(values(Marking.markings)),
-  theme: PropTypes.object,
-  onPress: PropTypes.func,
-  onLongPress: PropTypes.func,
-  date: PropTypes.string,
-  disableAllTouchEventsForDisabledDays: PropTypes.bool,
-  disableAllTouchEventsForInactiveDays: PropTypes.bool
-};

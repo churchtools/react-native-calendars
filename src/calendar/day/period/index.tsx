@@ -1,6 +1,5 @@
-import XDate from 'xdate';
 import PropTypes from 'prop-types';
-import React, {useCallback, useRef, useMemo} from 'react';
+import React, {useCallback, useRef, useMemo, FunctionComponent} from 'react';
 import {TouchableWithoutFeedback, TouchableOpacity, Text, View, ViewStyle, ViewProps, TextStyle, StyleProp} from 'react-native';
 
 import {xdateToData} from '../../../interface';
@@ -8,6 +7,7 @@ import {Theme, DayState, DateData} from '../../../types';
 import styleConstructor from './style';
 import Dot from '../dot';
 import {MarkingProps} from '../marking';
+import {useMemoCompare} from "../../../hooks";
 
 
 export interface PeriodDayProps extends ViewProps {
@@ -29,9 +29,9 @@ type MarkingStyle = {
   day?: ViewStyle;
 }
 
-const PeriodDay = (props: PeriodDayProps) => {
+const PeriodDay: FunctionComponent<PeriodDayProps> = React.memo((props: PeriodDayProps) => {
   const {theme, marking, date, onPress, onLongPress, state, accessibilityLabel, testID, children} = props;
-  const dateData = date ? xdateToData(new XDate(date)) : undefined;
+  const dateData = useMemoCompare(date ? xdateToData(date) : undefined, ((oldVal, newVal) => oldVal?.timestamp === newVal?.timestamp));
   const style = useRef(styleConstructor(theme));
 
   const markingStyle = useMemo(() => {
@@ -47,7 +47,7 @@ const PeriodDay = (props: PeriodDayProps) => {
       } else if (marking.selected) {
         defaultStyle.textStyle = {color: style.current.selectedText.color};
       }
-  
+
       if (marking.startingDay) {
         defaultStyle.startingDay = {backgroundColor: marking.color};
       }
@@ -57,7 +57,7 @@ const PeriodDay = (props: PeriodDayProps) => {
       if (!marking.startingDay && !marking.endingDay) {
         defaultStyle.day = {backgroundColor: marking.color};
       }
-      
+
       if (marking.textColor) {
         defaultStyle.textStyle = {color: marking.textColor};
       }
@@ -67,7 +67,7 @@ const PeriodDay = (props: PeriodDayProps) => {
       if (marking.customContainerStyle) {
         defaultStyle.containerStyle = marking.customContainerStyle;
       }
-  
+
       return defaultStyle;
     }
   }, [marking]);
@@ -84,7 +84,7 @@ const PeriodDay = (props: PeriodDayProps) => {
         borderRadius: 17,
         overflow: 'hidden'
       });
-      
+
       if (markingStyle.containerStyle) {
         containerStyle.push(markingStyle.containerStyle);
       }
@@ -154,14 +154,14 @@ const PeriodDay = (props: PeriodDayProps) => {
 
   const _onPress = useCallback(() => {
     onPress?.(dateData);
-  }, [onPress]);
+  }, [onPress, dateData]);
 
   const _onLongPress = useCallback(() => {
     onLongPress?.(dateData);
-  }, [onLongPress]);
-    
+  }, [onLongPress, dateData]);
+
   const Component = marking ? TouchableWithoutFeedback : TouchableOpacity;
-  
+
   return (
     <Component
       testID={testID}
@@ -178,12 +178,14 @@ const PeriodDay = (props: PeriodDayProps) => {
           <Text allowFontScaling={false} style={textStyle}>
             {String(children)}
           </Text>
-          <Dot theme={theme} color={marking?.dotColor} marked={marking?.marked}/>
+          <View style={style.current.dotContainer}>
+            <Dot theme={theme} color={marking?.dotColor} marked={marking?.marked}/>
+          </View>
         </View>
       </View>
     </Component>
   );
-};
+});
 
 export default PeriodDay;
 PeriodDay.displayName = 'PeriodDay';

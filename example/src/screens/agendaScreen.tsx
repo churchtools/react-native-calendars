@@ -12,6 +12,10 @@ export default class AgendaScreen extends Component<State> {
     items: undefined
   };
 
+  // reservationsKeyExtractor = (item, index) => {
+  //   return `${item?.reservation?.day}${index}`;
+  // };
+
   render() {
     return (
       <Agenda
@@ -38,6 +42,7 @@ export default class AgendaScreen extends Component<State> {
         //renderDay={(day, item) => (<Text>{day ? day.day: 'item'}</Text>)}
         // hideExtraDays={false}
         // showOnlySelectedDayItems
+        // reservationsKeyExtractor={this.reservationsKeyExtractor}
       />
     );
   }
@@ -52,8 +57,8 @@ export default class AgendaScreen extends Component<State> {
 
         if (!items[strTime]) {
           items[strTime] = [];
-          
-          const numItems = Math.floor(Math.random() * 3 + 1);
+
+          const numItems = Math.floor(Math.random() * 5 + 1);
           for (let j = 0; j < numItems; j++) {
             items[strTime].push({
               name: 'Item for ' + strTime + ' #' + j,
@@ -63,7 +68,7 @@ export default class AgendaScreen extends Component<State> {
           }
         }
       }
-      
+
       const newItems: AgendaSchedule = {};
       Object.keys(items).forEach(key => {
         newItems[key] = items[key];

@@ -13,6 +13,9 @@ export default class AgendaScreenHideEmpty extends Component<State> {
   };
 
   render() {
+
+    console.log("LOG-d items", this.state.items);
+
     return (
       <Agenda
         testID={testIDs.agenda.CONTAINER}
@@ -55,7 +58,7 @@ export default class AgendaScreenHideEmpty extends Component<State> {
           items[strTime] = [];
 
           // Many days without appointments
-          const numItems = Math.floor(Math.random() * 10 - 8);
+          const numItems = Math.floor(Math.random() * 10 - 5);
           for (let j = 0; j < numItems; j++) {
             items[strTime].push({
               name: 'Item for ' + strTime + ' #' + j,
