@@ -1,8 +1,12 @@
 let moment;
 // Moment is an optional dependency
 export const getMoment = () => {
-    if (!moment) {
-        moment = require('moment');
+  if (!moment) {
+    try {
+      moment = require('moment');
+    } catch {
+      // Moment is not available
     }
-    return moment;
+  }
+  return moment;
 };

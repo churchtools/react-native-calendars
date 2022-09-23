@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import XDate from 'xdate';
-import { Component } from 'react';
+import { PureComponent } from 'react';
 import { StyleProp, ViewStyle, NativeSyntheticEvent, NativeScrollEvent, LayoutChangeEvent, FlatListProps } from 'react-native';
 import { ReservationProps } from './reservation';
-import { AgendaEntry, AgendaSchedule } from '../../types';
+import { AgendaEntry, AgendaSchedule, DayAgenda } from '../../types';
 export declare type ReservationListProps = ReservationProps & {
     /** the list of items that have to be displayed in agenda. If you want to render item as empty date
     the value of date key kas to be an empty array []. If there exists no value for date key it is
@@ -41,14 +41,10 @@ export declare type ReservationListProps = ReservationProps & {
     /** Flat-List onViewableItemsChanged callback */
     onViewableItemsChanged?: FlatListProps<DayAgenda>["onViewableItemsChanged"];
 };
-interface DayAgenda {
-    reservation?: AgendaEntry;
-    date?: XDate;
-}
 interface State {
     reservations: DayAgenda[];
 }
-declare class ReservationList extends Component<ReservationListProps, State> {
+declare class ReservationList extends PureComponent<ReservationListProps, State> {
     static displayName: string;
     static propTypes: {
         items: PropTypes.Requireable<object>;

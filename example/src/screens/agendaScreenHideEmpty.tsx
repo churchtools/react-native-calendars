@@ -13,9 +13,6 @@ export default class AgendaScreenHideEmpty extends Component<State> {
   };
 
   render() {
-
-    console.log("LOG-d items", this.state.items);
-
     return (
       <Agenda
         testID={testIDs.agenda.CONTAINER}
@@ -46,22 +43,19 @@ export default class AgendaScreenHideEmpty extends Component<State> {
   }
 
   loadItems = (day: DateData) => {
-    const items = this.state.items || {};
+    const generateItem = (dayNumber: number, month = day.month) => {
+      const items = {...this.state.items} || {};
 
-    setTimeout(() => {
+      for (let i = 1; i <= dayNumber; i++) {
 
-      for (let i = -15; i < 85; i++) {
-        const time = day.timestamp + i * 24 * 60 * 60 * 1000;
-        const strTime = this.timeToString(time);
+        const date = new Date(day.year, month, i);
+        const strTime = date.toISOString().split('T')[0];
 
         if (!items[strTime]) {
           items[strTime] = [];
-
-          // Many days without appointments
-          const numItems = Math.floor(Math.random() * 10 - 5);
-          for (let j = 0; j < numItems; j++) {
+          if (i === dayNumber) {
             items[strTime].push({
-              name: 'Item for ' + strTime + ' #' + j,
+              name: 'Item for ' + strTime,
               height: Math.max(50, Math.floor(Math.random() * 150)),
               day: strTime
             });
@@ -69,21 +63,36 @@ export default class AgendaScreenHideEmpty extends Component<State> {
         }
       }
 
-      // No appointments in first 15 days -> Testing if initial rendering is correct
-      for (let i = 0; i < 15; i++) {
-        const time = day.timestamp + i * 24 * 60 * 60 * 1000;
-        const strTime = this.timeToString(time);
-        items[strTime] = [];
-      }
+      this.setState({items});
+    };
 
-      const newItems: AgendaSchedule = {};
-      Object.keys(items).forEach(key => {
-        newItems[key] = items[key];
-      });
-      this.setState({
-        items: newItems
-      });
-    }, 1000);
+    setTimeout(() => generateItem(2), 1000);
+    setTimeout(() => generateItem(4), 1200);
+    setTimeout(() => generateItem(6), 1400);
+    setTimeout(() => generateItem(8), 1600);
+    setTimeout(() => generateItem(10), 1800);
+    setTimeout(() => generateItem(12), 2000);
+    setTimeout(() => generateItem(16), 2200);
+    setTimeout(() => generateItem(20), 2400);
+    setTimeout(() => generateItem(24), 2600);
+
+    let date = new Date(day.timestamp);
+    let numberDays = date.getDate();
+    setTimeout(() => generateItem(numberDays), 2800);
+
+    setTimeout(() => generateItem(2, day.month + 1), 3000);
+    setTimeout(() => generateItem(4, day.month + 1), 3200);
+    setTimeout(() => generateItem(6, day.month + 1), 3400);
+    setTimeout(() => generateItem(8, day.month + 1), 3600);
+    setTimeout(() => generateItem(10, day.month + 1), 3800);
+    setTimeout(() => generateItem(12, day.month + 1), 4000);
+    setTimeout(() => generateItem(16, day.month + 1), 4200);
+    setTimeout(() => generateItem(20, day.month + 1), 4400);
+    setTimeout(() => generateItem(24, day.month + 1), 4600);
+
+    date = new Date(day.year, day.month + 1, day.day);
+    numberDays = date.getDate();
+    setTimeout(() => generateItem(numberDays, day.month + 1), 4800);
   }
 
   renderItem = (reservation: AgendaEntry, isFirst: boolean) => {

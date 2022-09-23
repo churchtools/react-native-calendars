@@ -1,14 +1,14 @@
 import isFunction from 'lodash/isFunction';
 import PropTypes from 'prop-types';
 import XDate from 'xdate';
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import {ActivityIndicator, View, FlatList} from 'react-native';
-import {extractComponentProps} from '../../componentUpdater';
+import {extractReservationProps} from '../../componentUpdater';
 import {sameDate} from '../../dateutils';
 import {toMarkingFormat} from '../../interface';
 import styleConstructor from './style';
 import Reservation from './reservation';
-class ReservationList extends Component {
+class ReservationList extends PureComponent {
   static displayName = 'ReservationList';
   static propTypes = {
     ...Reservation.propTypes,
@@ -196,7 +196,11 @@ class ReservationList extends Component {
     return false;
   };
   renderRow = ({item, index}) => {
-    const reservationProps = extractComponentProps(Reservation, this.props);
+    const {hideEmptyDays} = this.props;
+    const reservationProps = extractReservationProps(this.props);
+    if (hideEmptyDays && !item.reservation) {
+      return <View onLayout={this.onRowLayoutChange.bind(this, index)} />;
+    }
     return (
       <View onLayout={this.onRowLayoutChange.bind(this, index)}>
         <Reservation {...reservationProps} item={item.reservation} date={item.date} />

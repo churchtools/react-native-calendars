@@ -1,6 +1,6 @@
 import XDate from 'xdate';
 import React, { ReactNode } from 'react';
-import { StyleProp, ViewStyle } from 'react-native';
+import { StyleProp, ViewStyle, Insets } from 'react-native';
 import { Theme, Direction } from '../../types';
 export interface CalendarHeaderProps {
     month?: XDate;
@@ -15,7 +15,7 @@ export interface CalendarHeaderProps {
     showWeekNumbers?: boolean;
     /** Month format in the title. Formatting values: http://arshaw.com/xdate/#Formatting */
     monthFormat?: string;
-    /**  Hide day names */
+    /** Hide day names */
     hideDayNames?: boolean;
     /** Hide month navigation arrows */
     hideArrows?: boolean;
@@ -25,6 +25,8 @@ export interface CalendarHeaderProps {
     onPressArrowLeft?: (method: () => void, month?: XDate) => void;
     /** Handler which gets executed when press arrow icon right. It receive a callback can go next month */
     onPressArrowRight?: (method: () => void, month?: XDate) => void;
+    /** Left & Right arrows. Additional distance outside of the buttons in which a press is detected, default: 20 */
+    arrowsHitSlop?: Insets | number;
     /** Disable left arrow */
     disableArrowLeft?: boolean;
     /** Disable right arrow */
@@ -41,6 +43,12 @@ export interface CalendarHeaderProps {
     style?: StyleProp<ViewStyle>;
     accessibilityElementsHidden?: boolean;
     importantForAccessibility?: 'auto' | 'yes' | 'no' | 'no-hide-descendants';
+    /** The number of days to present in the header */
+    numberOfDays?: number;
+    /** The current date presented */
+    current?: string;
+    /** Left inset for the timeline calendar header, default is 72 */
+    timelineLeftInset?: number;
 }
 declare const CalendarHeader: React.ForwardRefExoticComponent<CalendarHeaderProps & React.RefAttributes<unknown>>;
 export default CalendarHeader;

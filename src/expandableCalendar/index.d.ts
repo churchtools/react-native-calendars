@@ -39,7 +39,6 @@ export interface ExpandableCalendarProps extends CalendarListProps {
 declare const ExpandableCalendar: {
     (props: ExpandableCalendarProps): JSX.Element;
     displayName: string;
-    propTypes: any;
     defaultProps: {
         horizontal: boolean;
         initialPosition: Positions;

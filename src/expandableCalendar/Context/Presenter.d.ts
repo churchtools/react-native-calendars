@@ -1,12 +1,13 @@
-import { UpdateSources } from '../commons';
 import { CalendarContextProviderProps } from './Provider';
+/** Today */
+export declare const getTodayDate: () => string;
+export declare const getTodayFormatted: () => any;
+/** Today button's icon */
 export declare const _getIconDown: () => any;
 export declare const _getIconUp: () => any;
 export declare const getButtonIcon: (date: string, showTodayButton?: boolean) => any;
-export declare const setDate: (props: CalendarContextProviderProps, date: string, newDate: string, updateState: (buttonIcon: number) => void, updateSource: UpdateSources) => void;
-export declare const setDisabled: (showTodayButton: boolean, newDisabledValue: boolean, oldDisabledValue: boolean, updateState: (disabled: boolean) => void) => void;
+/** Animations */
 export declare const shouldAnimateTodayButton: (props: CalendarContextProviderProps) => boolean | undefined;
-export declare const getTodayDate: () => string;
 export declare const getPositionAnimation: (date: string, todayBottomMargin?: number) => {
     toValue: number;
     tension: number;
@@ -19,4 +20,3 @@ export declare const getOpacityAnimation: ({ disabledOpacity }: CalendarContextP
     duration: number;
     useNativeDriver: boolean;
 };
-export declare const getTodayFormatted: () => any;

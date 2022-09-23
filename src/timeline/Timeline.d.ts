@@ -5,9 +5,9 @@ import { TimelineHoursProps } from './TimelineHours';
 import { Event, PackedEvent } from './EventBlock';
 export interface TimelineProps {
     /**
-     * The date of this timeline instance in ISO format (e.g. 2011-10-25)
+     * The date / dates of this timeline instance in ISO format (e.g. 2011-10-25)
      */
-    date?: string;
+    date?: string | string[];
     /**
      * List of events to display in this timeline
      */
@@ -40,6 +40,7 @@ export interface TimelineProps {
      */
     onBackgroundLongPressOut?: TimelineHoursProps['onBackgroundLongPressOut'];
     styles?: Theme;
+    /** Specify theme properties to override specific styles for calendar parts */
     theme?: Theme;
     /**
      * Should scroll to first event when loaded
@@ -92,6 +93,14 @@ export interface TimelineProps {
      * Background color for unavailable hours
      */
     unavailableHoursColor?: string;
+    /**
+     * The number of days to present in the timeline calendar
+     */
+    numberOfDays?: number;
+    /**
+     * The left inset of the timeline calendar (sidebar width), default is 72
+     */
+    timelineLeftInset?: number;
 }
 export { Event as TimelineEventProps, PackedEvent as TimelinePackedEventProps };
 declare const _default: React.MemoExoticComponent<(props: TimelineProps) => JSX.Element>;

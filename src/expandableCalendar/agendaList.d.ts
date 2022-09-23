@@ -37,13 +37,8 @@ declare const AgendaList: {
         dayFormatter: PropTypes.Requireable<(...args: any[]) => any>;
         useMoment: PropTypes.Requireable<boolean>;
         markToday: PropTypes.Requireable<boolean>;
-        sectionStyle: PropTypes.Requireable<number | object>;
+        sectionStyle: PropTypes.Requireable<NonNullable<number | object | null | undefined>>;
         avoidDateUpdates: PropTypes.Requireable<boolean>;
-    };
-    defaultProps: {
-        dayFormat: string;
-        stickySectionHeadersEnabled: boolean;
-        markToday: boolean;
     };
 };
 export default AgendaList;

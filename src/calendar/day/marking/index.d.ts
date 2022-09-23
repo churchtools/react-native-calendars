@@ -1,4 +1,4 @@
-/// <reference types="react" />
+import { FunctionComponent } from 'react';
 import { ViewStyle, TextStyle, StyleProp } from 'react-native';
 import { Theme, MarkingTypes } from '../../../types';
 import { DotProps } from '../dot';
@@ -46,9 +46,7 @@ export interface MarkingProps extends DotProps {
     accessibilityLabel?: string;
     customStyles?: CustomStyle;
 }
-declare const Marking: {
-    (props: MarkingProps): JSX.Element;
-    displayName: string;
+declare const Marking: FunctionComponent<MarkingProps> & {
     markings: typeof Markings;
 };
 export default Marking;

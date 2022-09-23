@@ -1,5 +1,5 @@
 import XDate from 'xdate';
-import { Component } from 'react';
+import React from 'react';
 import { Theme } from '../types';
 import { CalendarProps } from '../calendar';
 export declare type CalendarListItemProps = CalendarProps & {
@@ -9,24 +9,7 @@ export declare type CalendarListItemProps = CalendarProps & {
     horizontal?: boolean;
     theme?: Theme;
     scrollToMonth?: (date: XDate) => void;
+    visible?: boolean;
 };
-declare type CalendarListItemState = {
-    hideArrows: boolean;
-    hideExtraDays: boolean;
-};
-declare class CalendarListItem extends Component<CalendarListItemProps, CalendarListItemState> {
-    static displayName: string;
-    static propTypes: any;
-    static defaultProps: {
-        hideArrows: boolean;
-        hideExtraDays: boolean;
-    };
-    style: any;
-    constructor(props: CalendarListItemProps);
-    shouldComponentUpdate(nextProps: CalendarListItemProps): boolean;
-    onPressArrowLeft: (method: () => void, month: XDate) => void;
-    onPressArrowRight: (method: () => void, month: XDate) => void;
-    getCalendarStyle: (this: any, width: any, height: any, style: any) => any[];
-    render(): JSX.Element;
-}
+declare const CalendarListItem: React.MemoExoticComponent<(props: CalendarListItemProps) => JSX.Element>;
 export default CalendarListItem;

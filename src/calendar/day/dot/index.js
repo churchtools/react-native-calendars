@@ -1,37 +1,31 @@
-import PropTypes from 'prop-types';
-import React, { useRef } from 'react';
-import { View } from 'react-native';
+import React, {useMemo, useRef} from 'react';
+import {View} from 'react-native';
 import styleConstructor from './style';
-const Dot = ({ theme, marked, disabled, inactive, color, today, selected }) => {
-    const style = useRef(styleConstructor(theme));
-    const dotStyle = [style.current.dot];
-    if (marked) {
-        dotStyle.push(style.current.visibleDot);
-        if (today) {
-            dotStyle.push(style.current.todayDot);
-        }
-        if (disabled) {
-            dotStyle.push(style.current.disabledDot);
-        }
-        if (inactive) {
-            dotStyle.push(style.current.inactiveDot);
-        }
-        if (selected) {
-            dotStyle.push(style.current.selectedDot);
-        }
-        if (color) {
-            dotStyle.push({ backgroundColor: color });
-        }
+const Dot = React.memo(({theme, marked, disabled, inactive, color, today, selected}) => {
+  const style = useRef(styleConstructor(theme));
+  const dotStyle = useMemo(() => {
+    const newStyle = [style.current.dot];
+    if (!marked) {
+      return newStyle;
     }
-    return <View style={dotStyle}/>;
-};
+    newStyle.push(style.current.visibleDot);
+    if (today) {
+      newStyle.push(style.current.todayDot);
+    }
+    if (disabled) {
+      newStyle.push(style.current.disabledDot);
+    }
+    if (inactive) {
+      newStyle.push(style.current.inactiveDot);
+    }
+    if (selected) {
+      newStyle.push(style.current.selectedDot);
+    }
+    if (color) {
+      newStyle.push({backgroundColor: color});
+    }
+    return newStyle;
+  }, [marked, today, disabled, inactive, selected, color]);
+  return <View style={dotStyle} />;
+});
 export default Dot;
-Dot.propTypes = {
-    theme: PropTypes.object,
-    color: PropTypes.string,
-    marked: PropTypes.bool,
-    selected: PropTypes.bool,
-    disabled: PropTypes.bool,
-    inactive: PropTypes.bool,
-    today: PropTypes.bool
-};

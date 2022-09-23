@@ -71,7 +71,7 @@ export default function styleConstructor(theme?: Theme): {
         paddingBottom: number;
         fontSize: number;
         fontFamily: string;
-        fontWeight: "normal" | "bold" | "100" | "200" | "300" | "400" | "500" | "600" | "700" | "800" | "900";
+        fontWeight: "300" | "600" | "normal" | "bold" | "100" | "200" | "400" | "500" | "700" | "800" | "900";
         color: string;
     };
     weekDayNames: {
@@ -83,7 +83,7 @@ export default function styleConstructor(theme?: Theme): {
         textAlign: "center";
         fontSize: number;
         fontFamily: string;
-        fontWeight: "normal" | "bold" | "100" | "200" | "300" | "400" | "500" | "600" | "700" | "800" | "900" | undefined;
+        fontWeight: "300" | "600" | "normal" | "bold" | "100" | "200" | "400" | "500" | "700" | "800" | "900" | undefined;
         color: string;
     };
     monthView: {
@@ -112,6 +112,9 @@ export default function styleConstructor(theme?: Theme): {
         paddingLeft: number;
         flexDirection: "row";
         justifyContent: "space-around";
+    };
+    partialWeek: {
+        paddingRight: number;
     };
     dayContainer: {
         flex: number;
@@ -177,7 +180,7 @@ export default function styleConstructor(theme?: Theme): {
     todayButtonText: {
         color: string;
         fontSize: number;
-        fontWeight: "normal" | "bold" | "100" | "200" | "300" | "400" | "500" | "600" | "700" | "800" | "900";
+        fontWeight: "300" | "600" | "normal" | "bold" | "100" | "200" | "400" | "500" | "700" | "800" | "900";
         fontFamily: string;
     };
     todayButtonImage: {

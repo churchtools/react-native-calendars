@@ -1,5 +1,10 @@
+/// <reference types="xdate" />
 import { ViewStyle, TextStyle } from 'react-native';
+import { MarkingProps } from './calendar/day/marking';
 export declare type MarkingTypes = 'dot' | 'multi-dot' | 'period' | 'multi-period' | 'custom';
+export declare type MarkedDates = {
+    [key: string]: MarkingProps;
+};
 export declare type DayState = 'selected' | 'disabled' | 'inactive' | 'today' | '';
 export declare type Direction = 'left' | 'right';
 export declare type DateData = {
@@ -10,16 +15,14 @@ export declare type DateData = {
     dateString: string;
 };
 export interface Theme {
-    container?: object;
+    timelineContainer?: object;
     contentStyle?: ViewStyle;
-    header?: object;
-    headerText?: object;
-    arrowButton?: object;
     event?: object;
     eventTitle?: object;
     eventSummary?: object;
     eventTimes?: object;
     line?: object;
+    verticalLine?: object;
     nowIndicatorLine?: object;
     nowIndicatorKnob?: object;
     timeLabel?: object;
@@ -52,15 +55,6 @@ export interface Theme {
     agendaDayNumColor?: string;
     agendaTodayColor?: string;
     agendaKnobColor?: string;
-    foregroundColor?: string;
-    separatorColor?: string;
-    processedColor?: string;
-    processingColor?: string;
-    failedColor?: string;
-    textSecondaryColor?: string;
-    textDefaultColor?: string;
-    textColor?: string;
-    textLinkColor?: string;
     todayButtonFontFamily?: TextStyle['fontFamily'];
     todayButtonFontWeight?: TextStyle['fontWeight'];
     todayButtonFontSize?: number;
@@ -107,3 +101,7 @@ export declare type AgendaEntry = {
 export declare type AgendaSchedule = {
     [date: string]: AgendaEntry[];
 };
+export interface DayAgenda {
+    reservation?: AgendaEntry;
+    date?: XDate;
+}

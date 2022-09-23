@@ -18,6 +18,9 @@ export interface TimelineHoursProps {
     styles: {
         [key: string]: ViewStyle | TextStyle;
     };
+    width: number;
+    numberOfDays: number;
+    timelineLeftInset?: number;
 }
 declare const _default: React.MemoExoticComponent<(props: TimelineHoursProps) => JSX.Element>;
 export default _default;

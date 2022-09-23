@@ -4,6 +4,8 @@ export interface NowIndicatorProps {
     styles: {
         [key: string]: ViewStyle | TextStyle;
     };
+    width: number;
+    left: number;
 }
 declare const NowIndicator: (props: NowIndicatorProps) => JSX.Element;
 export default NowIndicator;
