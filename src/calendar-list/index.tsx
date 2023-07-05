@@ -19,6 +19,7 @@ import {extractHeaderProps, extractCalendarProps} from '../componentUpdater';
 import {xdateToData, parseDate, toMarkingFormat} from '../interface';
 import {page, sameDate, sameMonth} from '../dateutils';
 import constants from '../commons/constants';
+import {ContextProp} from '../types';
 import {useDidUpdate, useMemoCompare} from '../hooks';
 import styleConstructor from './style';
 import Calendar, {CalendarProps} from '../calendar';
@@ -65,7 +66,7 @@ function defaultKeyExtractor (_: any, index: number){
  * @example: https://github.com/wix/react-native-calendars/blob/master/example/src/screens/calendarsList.js
  * @gif: https://github.com/wix/react-native-calendars/blob/master/demo/assets/calendar-list.gif
  */
-const CalendarList = (props: CalendarListProps, ref: any) => {
+const CalendarList = (props: CalendarListProps & ContextProp, ref: any) => {
   useImperativeHandle(ref, () => ({
     scrollToDay: (date: XDate | string, offset: number, animated: boolean) => {
       scrollToDay(date, offset, animated);
@@ -152,6 +153,12 @@ const CalendarList = (props: CalendarListProps, ref: any) => {
     });
   }, [items]);
 
+  const getDateIndex = useCallback((date: string) => {
+    return findIndex(items, function(item) {
+      return item.toString() === date.toString();
+    });
+  }, [items]);
+
   useEffect(() => {
     if (current) {
       scrollToMonth(new XDate(current));
@@ -203,7 +210,7 @@ const CalendarList = (props: CalendarListProps, ref: any) => {
 
   const addMonth = useCallback((count: number) => {
     const day = currentMonth?.clone().addMonths(count, true);
-    if (sameMonth(day, currentMonth)) {
+    if (sameMonth(day, currentMonth) || getDateIndex(day) === -1) {
       return;
     }
     scrollToMonth(day);
@@ -230,7 +237,7 @@ const CalendarList = (props: CalendarListProps, ref: any) => {
 
   const isDateInRange = useCallback((date) => {
     for(let i = -range.current; i <= range.current; i++) {
-      const newMonth = currentMonth?.clone().addMonths(i);
+      const newMonth = currentMonth?.clone().addMonths(i, true);
       if (sameMonth(date, newMonth)) {
         return true;
       }
@@ -297,7 +304,7 @@ const CalendarList = (props: CalendarListProps, ref: any) => {
   ]);
 
   return (
-    <View style={style.current.flatListContainer}>
+    <View style={style.current.flatListContainer} testID={testID}>
       <FlatList
         // @ts-expect-error
         ref={list}
@@ -310,7 +317,7 @@ const CalendarList = (props: CalendarListProps, ref: any) => {
         initialNumToRender={range.current}
         initialScrollIndex={initialDateIndex}
         viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
-        testID={testID}
+        testID={`${testID}.list`}
         onLayout={onLayout}
         removeClippedSubviews={removeClippedSubviews}
         pagingEnabled={pagingEnabled}

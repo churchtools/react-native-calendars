@@ -3,9 +3,9 @@ import XDate from 'xdate';
 import React, {useCallback, useContext, useMemo, useRef, useState} from 'react';
 import {FlatList, View, ViewToken} from 'react-native';
 
-import {sameWeek} from '../../dateutils';
+import {sameWeek, onSameDateRange, getWeekDates} from '../../dateutils';
 import {toMarkingFormat} from '../../interface';
-import {DateData} from '../../types';
+import {DateData, MarkedDates} from '../../types';
 import styleConstructor from '../style';
 import {CalendarListProps} from '../../calendar-list';
 import WeekDaysNames from '../../commons/WeekDaysNames';
@@ -16,7 +16,7 @@ import {extractCalendarProps} from '../../componentUpdater';
 import CalendarContext from '../Context';
 import {useDidUpdate} from '../../hooks';
 
-const NUMBER_OF_PAGES = 6;
+export const NUMBER_OF_PAGES = 6;
 const NUM_OF_ITEMS = NUMBER_OF_PAGES * 2 + 1; // NUMBER_OF_PAGES before + NUMBER_OF_PAGES after + current
 const APPLY_ANDROID_FIX = constants.isAndroid && constants.isRTL;
 
@@ -36,6 +36,8 @@ const WeekCalendar = (props: WeekCalendarProps) => {
     hideDayNames,
     current,
     theme,
+    testID,
+    markedDates,
   } = props;
   const context = useContext(CalendarContext);
   const {allowShadow = true, ...calendarListProps} = props;
@@ -50,8 +52,23 @@ const WeekCalendar = (props: WeekCalendarProps) => {
   const currentIndex = useRef(NUMBER_OF_PAGES);
 
   useDidUpdate(() => {
+    items.current = getDatesArray(date, firstDay, numberOfDays);
+    setListData(items.current);
+    visibleWeek.current = date;
+    list?.current?.scrollToIndex({index: NUMBER_OF_PAGES, animated: false});
+  }, [numberOfDays]);
+
+  useDidUpdate(() => {
     if (updateSource !== UpdateSources.WEEK_SCROLL) {
-      const pageIndex = items.current.findIndex(item => sameWeek(item, date, firstDay));
+      const pageIndex = items.current.findIndex(
+        item => isCustomNumberOfDays(numberOfDays) ?
+          onSameDateRange({
+            firstDay: item,
+            secondDay: date,
+            numberOfDays: numberOfDays as number,
+            firstDateInRange: item
+          }) :
+          sameWeek(item, date, firstDay));
       if (pageIndex !== currentIndex.current) {
         if (pageIndex >= 0) {
           visibleWeek.current = items.current[pageIndex];
@@ -77,16 +94,34 @@ const WeekCalendar = (props: WeekCalendarProps) => {
     }
   }, [onDayPress]);
 
+  const getCurrentWeekMarkings = useCallback((date: string, markings?: MarkedDates): MarkedDates | undefined => {
+    if (!markings) {
+      return;
+    }
+    const dates = getWeekDates(date, firstDay) as XDate[] | undefined;
+    return dates?.reduce((acc, date) => {
+      const dateString = toMarkingFormat(date);
+      return {
+        ...acc,
+      ...(
+        markings[dateString] && {[dateString]: markings[dateString]}
+      ),
+      };
+    }, {});
+  }, []);
+
   const weekStyle = useMemo(() => {
     return [{width: containerWidth}, propsStyle];
   }, [containerWidth, propsStyle]);
 
   const renderItem = useCallback(({item}: {item: string}) => {
     const currentContext = sameWeek(date, item, firstDay) ? context : undefined;
+    const markings = getCurrentWeekMarkings(item, markedDates);
 
     return (
       <Week
         {...others}
+        markedDates={markings}
         current={item}
         firstDay={firstDay}
         style={weekStyle}
@@ -96,7 +131,7 @@ const WeekCalendar = (props: WeekCalendarProps) => {
         timelineLeftInset={timelineLeftInset}
       />
     );
-  },[firstDay, _onDayPress, context, date]);
+  },[firstDay, _onDayPress, context, date, markedDates]);
 
   const keyExtractor = useCallback((item) => item, []);
 
@@ -174,7 +209,7 @@ const WeekCalendar = (props: WeekCalendarProps) => {
 
   return (
     <View
-      testID={props.testID}
+      testID={testID}
       style={weekCalendarStyle}
     >
       {!hideDayNames && (
@@ -184,6 +219,7 @@ const WeekCalendar = (props: WeekCalendarProps) => {
       )}
       <View style={style.current.container}>
           <FlatList
+            testID={`${testID}.list`}
             ref={list}
             style={style.current.container}
             data={listData}
@@ -204,6 +240,14 @@ const WeekCalendar = (props: WeekCalendarProps) => {
   );
 };
 
+function getDateForDayRange(date: string, weekIndex: number, numberOfDays: number) {
+  const d = new XDate(date);
+  if (weekIndex !== 0) {
+    d.addDays(numberOfDays * weekIndex);
+  }
+  return toMarkingFormat(d);
+}
+
 function getDate(date: string, firstDay: number, weekIndex: number, numberOfDays?: number) {
   const d = new XDate(date);
   // get the first day of the week as date (for the on scroll mark)
@@ -223,8 +267,15 @@ function getDate(date: string, firstDay: number, weekIndex: number, numberOfDays
 
 function getDatesArray(date: string, firstDay: number, numberOfDays?: number) {
   return [...Array(NUM_OF_ITEMS).keys()].map((index) => {
-    return getDate(date, firstDay, index - NUMBER_OF_PAGES, numberOfDays);
+    if(isCustomNumberOfDays(numberOfDays)) {
+      return getDateForDayRange(date, index - NUMBER_OF_PAGES, numberOfDays as number);
+    }
+    return getDate(date, firstDay, index - NUMBER_OF_PAGES);
   });
+}
+
+function isCustomNumberOfDays(numberOfDays?: number) {
+  return numberOfDays && numberOfDays > 1;
 }
 
 WeekCalendar.displayName = 'WeekCalendar';

@@ -25,7 +25,7 @@ const config = {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
-          editUrl: 'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/'
+          editUrl: 'https://github.com/wix/react-native-calendars/tree/master/docsRNC'
         },
         blog: {
           showReadingTime: true,
@@ -51,7 +51,7 @@ const config = {
         items: [
           {
             type: 'doc',
-            docId: 'intro',
+            docId: 'Intro',
             position: 'right',
             label: 'Docs'
           },
@@ -70,7 +70,7 @@ const config = {
             items: [
               {
                 label: 'Docs',
-                to: '/docs/intro'
+                to: '/docs/Intro'
               },
               {
                 label: 'GitHub',
