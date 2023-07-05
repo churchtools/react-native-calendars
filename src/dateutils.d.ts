@@ -1,6 +1,12 @@
 /// <reference types="xdate" />
 export declare function sameMonth(a?: XDate, b?: XDate): boolean;
 export declare function sameDate(a?: XDate, b?: XDate): boolean;
+export declare function onSameDateRange({ firstDay, secondDay, numberOfDays, firstDateInRange, }: {
+    firstDay: string;
+    secondDay: string;
+    numberOfDays: number;
+    firstDateInRange: string;
+}): boolean;
 export declare function sameWeek(a: string, b: string, firstDayOfWeek: number): boolean | undefined;
 export declare function isPastDate(date: string): boolean;
 export declare function isToday(date?: XDate | string): boolean;

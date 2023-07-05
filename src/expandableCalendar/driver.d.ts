@@ -5,13 +5,32 @@ export declare class ExpandableCalendarDriver {
     element: React.ReactElement;
     renderTree: ReturnType<typeof render>;
     constructor(testID: string, element: React.ReactElement);
-    get knobTestID(): string;
-    getDayTestID(date: string): string;
     render(element?: React.ReactElement<any, string | React.JSXElementConstructor<any>>): ReturnType<typeof render>;
-    getKnob(): ReactTestInstance;
+    /** Container */
     getExpandableContainer(): ReactTestInstance;
-    getDay(date: string): ReactTestInstance;
-    toggleKnob(): void;
     isCalendarExpanded(): boolean;
+    /** Header */
+    getRightArrow(): ReactTestInstance;
+    getLeftArrow(): ReactTestInstance;
+    /** Knob and Position */
+    get knobTestID(): string;
+    getKnob(): any;
+    toggleKnob(): void;
+    /** CalendarList */
+    getCalendarList(): ReactTestInstance;
+    getDayTestID(date: string): string;
+    getDay(date: string): ReactTestInstance;
     selectDay(date: string): void;
+    /** WeekCalendar */
+    getWeekCalendar(): ReactTestInstance;
+    getWeekDayTestID(date: string): string;
+    getWeekDay(date: string): ReactTestInstance;
+    selectWeekDay(date: string): void;
+    /** today button */
+    getTodayButton(): any;
+    /** actions */
+    pressOnTodayButton(): void;
+    pressOnHeaderArrow({ left }?: {
+        left?: boolean;
+    }): void;
 }

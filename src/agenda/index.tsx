@@ -226,9 +226,6 @@ export default class Agenda extends Component<AgendaProps, State> {
 
     this.props.onCalendarToggled?.(false);
 
-    console.log("LOG-d onDayPress - 1", optimisticScroll);
-
-
     if (!optimisticScroll) {
       this.setState({topDay: day.clone()});
     }

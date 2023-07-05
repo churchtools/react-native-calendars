@@ -6,7 +6,7 @@ export interface BasicDayProps extends ViewProps {
     state?: DayState;
     /** The marking object */
     marking?: MarkingProps;
-    /** Date marking style [simple/period/multi-dot/multi-period]. Default = 'simple' */
+    /** Date marking style [dot/multi-dot/period/multi-period]. Default = 'dot' */
     markingType?: MarkingTypes;
     /** Theme object */
     theme?: Theme;
@@ -25,5 +25,5 @@ export interface BasicDayProps extends ViewProps {
     /** Accessibility label */
     accessibilityLabel?: string;
 }
-declare const BasicDay: React.MemoExoticComponent<(props: BasicDayProps) => JSX.Element>;
+declare const BasicDay: React.MemoExoticComponent<(props: BasicDayProps) => React.JSX.Element>;
 export default BasicDay;

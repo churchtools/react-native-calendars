@@ -1,22 +1,13 @@
 import XDate from 'xdate';
-import React, {useEffect, useRef, useState, useCallback, useMemo} from 'react';
-import {Animated, TouchableOpacity, View} from 'react-native';
+import React, {useRef, useState, useCallback, useMemo} from 'react';
+import {View} from 'react-native';
 import {sameMonth} from '../../dateutils';
 import {xdateToData} from '../../interface';
 import {useDidUpdate} from '../../hooks';
 import {UpdateSources} from '../commons';
 import styleConstructor from '../style';
 import CalendarContext from './index';
-import {
-  shouldAnimateTodayButton,
-  shouldAnimateOpacity,
-  getButtonIcon,
-  getPositionAnimation,
-  getOpacityAnimation,
-  getTodayDate,
-  getTodayFormatted
-} from './Presenter';
-const TOP_POSITION = 65;
+import TodayButton from './todayButton';
 /**
  * @description: Calendar context provider component
  * @example: https://github.com/wix/react-native-calendars/blob/master/example/src/screens/expandableCalendar.js
@@ -28,6 +19,7 @@ const CalendarProvider = props => {
     onDateChanged,
     onMonthChange,
     showTodayButton = false,
+    disabledOpacity,
     todayBottomMargin,
     todayButtonStyle,
     style: propsStyle,
@@ -36,34 +28,25 @@ const CalendarProvider = props => {
     children
   } = props;
   const style = useRef(styleConstructor(theme));
-  const buttonY = useRef(new Animated.Value(todayBottomMargin ? -todayBottomMargin : -TOP_POSITION));
-  const opacity = useRef(new Animated.Value(1));
-  const today = useRef(getTodayFormatted());
+  const todayButton = useRef();
   const prevDate = useRef(date);
   const currDate = useRef(date); // for setDate only to keep prevDate up to date
   const [currentDate, setCurrentDate] = useState(date);
   const [updateSource, setUpdateSource] = useState(UpdateSources.CALENDAR_INIT);
-  const [isDisabled, setIsDisabled] = useState(false);
-  const [buttonIcon, setButtonIcon] = useState(getButtonIcon(date, showTodayButton));
   const wrapperStyle = useMemo(() => {
     return [style.current.contextWrapper, propsStyle];
   }, [style, propsStyle]);
   useDidUpdate(() => {
-    if (date) {
+    if (date && date !== currentDate) {
       _setDate(date, UpdateSources.PROP_UPDATE);
     }
   }, [date]);
-  useEffect(() => {
-    animateTodayButton(currentDate);
-  }, [todayBottomMargin, currentDate]);
-  /** Context */
   const _setDate = useCallback(
     (date, updateSource) => {
       prevDate.current = currDate.current;
       currDate.current = date;
       setCurrentDate(date);
       setUpdateSource(updateSource);
-      setButtonIcon(getButtonIcon(date, showTodayButton));
       onDateChanged?.(date, updateSource);
       if (!sameMonth(new XDate(date), new XDate(prevDate.current))) {
         onMonthChange?.(xdateToData(new XDate(date)), updateSource);
@@ -73,13 +56,11 @@ const CalendarProvider = props => {
   );
   const _setDisabled = useCallback(
     disabled => {
-      if (!showTodayButton || disabled === isDisabled) {
-        return;
+      if (showTodayButton) {
+        todayButton.current?.disable(disabled);
       }
-      setIsDisabled(disabled);
-      animateOpacity(disabled);
     },
-    [showTodayButton, isDisabled]
+    [showTodayButton]
   );
   const contextValue = useMemo(() => {
     return {
@@ -92,47 +73,22 @@ const CalendarProvider = props => {
       timelineLeftInset
     };
   }, [currentDate, updateSource, numberOfDays, _setDisabled]);
-  /** Animations */
-  const animateTodayButton = date => {
-    if (shouldAnimateTodayButton(props)) {
-      const animationData = getPositionAnimation(date, todayBottomMargin);
-      Animated.spring(buttonY.current, {
-        ...animationData
-      }).start();
-    }
-  };
-  const animateOpacity = disabled => {
-    if (shouldAnimateOpacity(props)) {
-      const animationData = getOpacityAnimation(props, disabled);
-      Animated.timing(opacity.current, {
-        ...animationData
-      }).start();
-    }
-  };
-  /** Events */
-  const onTodayPress = useCallback(() => {
-    _setDate(getTodayDate(), UpdateSources.TODAY_PRESS);
-  }, [_setDate]);
-  /** Renders */
   const renderTodayButton = () => {
     return (
-      <Animated.View style={[style.current.todayButtonContainer, {transform: [{translateY: buttonY.current}]}]}>
-        <TouchableOpacity
-          style={[style.current.todayButton, todayButtonStyle]}
-          onPress={onTodayPress}
-          disabled={isDisabled}
-        >
-          <Animated.Image style={[style.current.todayButtonImage, {opacity: opacity.current}]} source={buttonIcon} />
-          <Animated.Text allowFontScaling={false} style={[style.current.todayButtonText, {opacity: opacity.current}]}>
-            {today.current}
-          </Animated.Text>
-        </TouchableOpacity>
-      </Animated.View>
+      <TodayButton
+        ref={todayButton}
+        disabledOpacity={disabledOpacity}
+        margin={todayBottomMargin}
+        style={todayButtonStyle}
+        theme={theme}
+      />
     );
   };
   return (
     <CalendarContext.Provider value={contextValue}>
-      <View style={wrapperStyle}>{children}</View>
+      <View style={wrapperStyle} key={numberOfDays}>
+        {children}
+      </View>
       {showTodayButton && renderTodayButton()}
     </CalendarContext.Provider>
   );

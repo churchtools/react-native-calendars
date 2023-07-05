@@ -65,9 +65,9 @@ class ReservationList extends PureComponent {
     this.setState({reservations});
   }
   updateReservations(props) {
-    const {selectedDay} = props;
+    const {selectedDay, showOnlySelectedDayItems} = props;
     const reservations = this.getReservations(props);
-    if (this.list && !sameDate(selectedDay, this.selectedDay)) {
+    if (!showOnlySelectedDayItems && this.list && !sameDate(selectedDay, this.selectedDay)) {
       let scrollPosition = 0;
       for (let i = 0; i < reservations.scrollPosition; i++) {
         scrollPosition += this.heights[i] || 0;

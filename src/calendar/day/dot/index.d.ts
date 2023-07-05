@@ -9,5 +9,5 @@ export interface DotProps {
     inactive?: boolean;
     today?: boolean;
 }
-declare const Dot: React.MemoExoticComponent<({ theme, marked, disabled, inactive, color, today, selected }: DotProps) => JSX.Element>;
+declare const Dot: React.MemoExoticComponent<({ theme, marked, disabled, inactive, color, today, selected }: DotProps) => React.JSX.Element>;
 export default Dot;

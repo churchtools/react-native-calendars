@@ -16,11 +16,11 @@ const UseTimelinePages = ({date, listRef, numberOfDays}) => {
   const [pages, setPages] = useState(pagesRef.current);
   const shouldResetPages = useRef(false);
   useEffect(() => {
-    setPages(
-      times(PAGES_COUNT, i => {
-        return generateDay(date, numberOfDays * (i - Math.floor(PAGES_COUNT / 2)));
-      })
-    );
+    const updatedDays = times(PAGES_COUNT, i => {
+      return generateDay(date, numberOfDays * (i - Math.floor(PAGES_COUNT / 2)));
+    });
+    pagesRef.current = updatedDays;
+    setPages(updatedDays);
   }, [numberOfDays]);
   const isOutOfRange = useCallback(index => {
     return !inRange(index, 0, PAGES_COUNT);

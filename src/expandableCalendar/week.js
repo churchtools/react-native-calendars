@@ -28,6 +28,9 @@ const Week = React.memo(props => {
     testID
   } = props;
   const style = useRef(styleConstructor(theme));
+  const disableDaySelection = useMemo(() => {
+    return !!numberOfDays && numberOfDays > 1;
+  }, [numberOfDays]);
   const getWeek = useCallback(
     date => {
       if (date) {
@@ -55,8 +58,10 @@ const Week = React.memo(props => {
           {...dayProps}
           testID={`${testID}.day_${dayString}`}
           date={dayString}
-          state={getState(day, currXdate, props)}
-          marking={markedDates?.[dayString]}
+          state={getState(day, currXdate, props, disableDaySelection)}
+          marking={
+            disableDaySelection ? {...markedDates?.[dayString], disableTouchEvent: true} : markedDates?.[dayString]
+          }
           onPress={onDayPress}
           onLongPress={onDayLongPress}
         />
@@ -78,7 +83,7 @@ const Week = React.memo(props => {
     return week;
   };
   return (
-    <View style={style.current.container}>
+    <View style={style.current.container} testID={`${testID}.week_${current}`}>
       <View style={[style.current.week, numberOfDays > 1 ? partialWeekStyle : undefined, propsStyle]}>
         {renderWeek()}
       </View>

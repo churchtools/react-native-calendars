@@ -16,8 +16,8 @@ const TimelineList = props => {
   const [timelineOffset, setTimelineOffset] = useState();
   const {pages, pagesRef, resetPages, resetPagesDebounce, scrollToPageDebounce, shouldResetPages, isOutOfRange} =
     useTimelinePages({date, listRef, numberOfDays});
-  useEffect(() => {
-    if (date !== prevDate.current) {
+  const scrollToCurrentDate = useCallback(
+    date => {
       const datePageIndex = pagesRef.current.indexOf(date);
       if (updateSource !== UpdateSources.LIST_DRAG) {
         if (isOutOfRange(datePageIndex)) {
@@ -27,8 +27,14 @@ const TimelineList = props => {
         }
       }
       prevDate.current = date;
+    },
+    [updateSource]
+  );
+  useEffect(() => {
+    if (date !== prevDate.current) {
+      scrollToCurrentDate(date);
     }
-  }, [date, updateSource]);
+  }, [date]);
   const onScroll = useCallback(() => {
     if (shouldResetPages.current) {
       resetPagesDebounce.cancel();

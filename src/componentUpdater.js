@@ -199,6 +199,7 @@ export function extractReservationListProps(props) {
     // Reservation props
     date,
     item,
+    theme,
     rowHasChanged,
     renderDay,
     renderItem,
@@ -225,6 +226,7 @@ export function extractReservationListProps(props) {
     // Reservation props
     date,
     item,
+    theme,
     rowHasChanged,
     renderDay,
     renderItem,

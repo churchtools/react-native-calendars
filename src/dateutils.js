@@ -18,6 +18,18 @@ export function sameDate(a, b) {
     return a?.getFullYear() === b?.getFullYear() && a?.getMonth() === b?.getMonth() && a?.getDate() === b?.getDate();
   }
 }
+export function onSameDateRange({firstDay, secondDay, numberOfDays, firstDateInRange}) {
+  const aDate = new XDate(firstDay);
+  const bDate = new XDate(secondDay);
+  const firstDayDate = new XDate(firstDateInRange);
+  const aDiff = aDate.getTime() - firstDayDate.getTime();
+  const bDiff = bDate.getTime() - firstDayDate.getTime();
+  const aTotalDays = Math.ceil(aDiff / (1000 * 3600 * 24));
+  const bTotalDays = Math.ceil(bDiff / (1000 * 3600 * 24));
+  const aWeek = Math.floor(aTotalDays / numberOfDays);
+  const bWeek = Math.floor(bTotalDays / numberOfDays);
+  return aWeek === bWeek;
+}
 export function sameWeek(a, b, firstDayOfWeek) {
   const weekDates = getWeekDates(a, firstDayOfWeek, 'yyyy-MM-dd');
   const element = weekDates instanceof XDate ? new XDate(b) : b;

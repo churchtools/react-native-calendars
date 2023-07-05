@@ -340,7 +340,7 @@ const CalendarList = (props: CalendarListProps & ContextProp, ref: any) => {
 };
 
 // @ts-expect-error
-export default memo(forwardRef(CalendarList)) as FunctionComponent<CalendarListProps & {ref?: any}>;
+export default memo(forwardRef(CalendarList)) as FunctionComponent<CalendarListProps & ContextProp & {ref?: any}>;
 CalendarList.displayName = 'CalendarList';
 CalendarList.propTypes = {
   ...Calendar.propTypes,

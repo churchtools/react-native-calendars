@@ -5,7 +5,7 @@ import { Animated, ViewStyle, LayoutChangeEvent, NativeSyntheticEvent, NativeScr
 import { DateData, AgendaSchedule } from '../types';
 import { CalendarListProps } from '../calendar-list';
 import ReservationList, { ReservationListProps } from './reservation-list';
-export declare type AgendaProps = CalendarListProps & ReservationListProps & {
+export type AgendaProps = CalendarListProps & ReservationListProps & {
     /** the list of items that have to be displayed in agenda. If you want to render item as empty date
      the value of date key kas to be an empty array []. If there exists no value for date key it is
      considered that the date in question is not yet loaded */
@@ -27,7 +27,7 @@ export declare type AgendaProps = CalendarListProps & ReservationListProps & {
     /** Whether the knob should always be visible (when hideKnob = false) */
     showClosingKnob?: boolean;
 };
-declare type State = {
+type State = {
     scrollY: Animated.Value;
     calendarIsReady: boolean;
     calendarScrollable: boolean;
@@ -189,10 +189,10 @@ export default class Agenda extends Component<AgendaProps, State> {
         accessibilityIgnoresInvertColors?: React.Validator<boolean | null | undefined> | undefined;
         horizontal?: React.Validator<boolean | null | undefined> | undefined;
         ItemSeparatorComponent?: React.Validator<React.ComponentType<any> | null | undefined> | undefined;
-        ListEmptyComponent?: React.Validator<React.ComponentType<any> | React.ReactElement<any, string | React.JSXElementConstructor<any>> | null | undefined> | undefined;
-        ListFooterComponent?: React.Validator<React.ComponentType<any> | React.ReactElement<any, string | React.JSXElementConstructor<any>> | null | undefined> | undefined;
+        ListEmptyComponent?: React.Validator<React.ComponentType<any> | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | null | undefined> | undefined;
+        ListFooterComponent?: React.Validator<React.ComponentType<any> | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | null | undefined> | undefined;
         ListFooterComponentStyle?: React.Validator<import("react-native").StyleProp<ViewStyle>> | undefined;
-        ListHeaderComponent?: React.Validator<React.ComponentType<any> | React.ReactElement<any, string | React.JSXElementConstructor<any>> | null | undefined> | undefined;
+        ListHeaderComponent?: React.Validator<React.ComponentType<any> | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | null | undefined> | undefined;
         ListHeaderComponentStyle?: React.Validator<import("react-native").StyleProp<ViewStyle>> | undefined;
         columnWrapperStyle?: React.Validator<import("react-native").StyleProp<ViewStyle>> | undefined;
         keyboardShouldPersistTaps?: React.Validator<boolean | "never" | "always" | "handled" | null | undefined> | undefined;
@@ -279,6 +279,7 @@ export default class Agenda extends Component<AgendaProps, State> {
         overScrollMode?: React.Validator<"auto" | "never" | "always" | null | undefined> | undefined;
         nestedScrollEnabled?: React.Validator<boolean | null | undefined> | undefined;
         persistentScrollbar?: React.Validator<boolean | null | undefined> | undefined;
+        context?: React.Validator<import("../expandableCalendar/Context").CalendarContextProps | null | undefined> | undefined;
         ref?: React.Validator<any> | undefined;
     };
     private style;
@@ -319,11 +320,11 @@ export default class Agenda extends Component<AgendaProps, State> {
     onSnapAfterDrag: (e: NativeSyntheticEvent<NativeScrollEvent>) => void;
     onVisibleMonthsChange: (months: DateData[]) => void;
     onDayChange: (day: XDate) => void;
-    renderReservations(): JSX.Element;
-    renderCalendarList(): JSX.Element;
+    renderReservations(): React.JSX.Element;
+    renderCalendarList(): React.JSX.Element;
     renderKnob(): JSX.Element | null;
-    renderWeekDaysNames: () => JSX.Element;
-    renderWeekNumbersSpace: () => false | JSX.Element | undefined;
-    render(): JSX.Element;
+    renderWeekDaysNames: () => React.JSX.Element;
+    renderWeekNumbersSpace: () => false | React.JSX.Element | undefined;
+    render(): React.JSX.Element;
 }
 export {};

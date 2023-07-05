@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import XDate from 'xdate';
+import isEmpty from 'lodash/isEmpty';
 import React, {useRef, useState, useEffect, useCallback, useMemo} from 'react';
 import {View} from 'react-native';
 // @ts-expect-error
@@ -152,13 +153,14 @@ const Calendar = React.memo(props => {
     }
     const dayProps = extractDayProps(props);
     const dateString = toMarkingFormat(day);
+    const isControlled = isEmpty(props.context);
     return (
       <View style={style.current.dayContainer} key={id}>
         <Day
           {...dayProps}
           testID={`${testID}.day_${dateString}`}
           date={dateString}
-          state={getState(day, currentMonth, props)}
+          state={getState(day, currentMonth, props, isControlled)}
           marking={markedDates?.[dateString]}
           onPress={_onDayPress}
           onLongPress={onLongPressDay}
@@ -224,6 +226,7 @@ const Calendar = React.memo(props => {
     <GestureComponent {...gestureProps}>
       <View
         style={[style.current.container, propsStyle]}
+        testID={testID}
         accessibilityElementsHidden={accessibilityElementsHidden} // iOS
         importantForAccessibility={importantForAccessibility} // Android
       >

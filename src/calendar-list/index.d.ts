@@ -1,6 +1,7 @@
 import XDate from 'xdate';
 import React from 'react';
 import { ViewStyle, FlatListProps } from 'react-native';
+import { ContextProp } from '../types';
 import { CalendarProps } from '../calendar';
 export interface CalendarListProps extends CalendarProps, Omit<FlatListProps<any>, 'data' | 'renderItem' | 'onViewableItemsChanged'> {
     /** Max amount of months allowed to scroll to the past. Default = 50 */
@@ -24,7 +25,7 @@ export interface CalendarListImperativeMethods {
     scrollToDay: (date: XDate | string, offset: number, animated: boolean) => void;
     scrollToMonth: (date: XDate | string) => void;
 }
-declare const _default: React.FunctionComponent<CalendarListProps & {
+declare const _default: React.FunctionComponent<CalendarListProps & ContextProp & {
     ref?: any;
 }>;
 export default _default;

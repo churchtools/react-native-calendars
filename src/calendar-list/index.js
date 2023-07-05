@@ -104,6 +104,14 @@ const CalendarList = (props, ref) => {
       return item.toString() === initialDate.current?.toString();
     });
   }, [items]);
+  const getDateIndex = useCallback(
+    date => {
+      return findIndex(items, function (item) {
+        return item.toString() === date.toString();
+      });
+    },
+    [items]
+  );
   useEffect(() => {
     if (current) {
       scrollToMonth(new XDate(current));
@@ -152,7 +160,7 @@ const CalendarList = (props, ref) => {
   const addMonth = useCallback(
     count => {
       const day = currentMonth?.clone().addMonths(count, true);
-      if (sameMonth(day, currentMonth)) {
+      if (sameMonth(day, currentMonth) || getDateIndex(day) === -1) {
         return;
       }
       scrollToMonth(day);
@@ -179,7 +187,7 @@ const CalendarList = (props, ref) => {
   const isDateInRange = useCallback(
     date => {
       for (let i = -range.current; i <= range.current; i++) {
-        const newMonth = currentMonth?.clone().addMonths(i);
+        const newMonth = currentMonth?.clone().addMonths(i, true);
         if (sameMonth(date, newMonth)) {
           return true;
         }
@@ -244,7 +252,7 @@ const CalendarList = (props, ref) => {
     }
   ]);
   return (
-    <View style={style.current.flatListContainer}>
+    <View style={style.current.flatListContainer} testID={testID}>
       <FlatList
         // @ts-expect-error
         ref={list}
@@ -257,7 +265,7 @@ const CalendarList = (props, ref) => {
         initialNumToRender={range.current}
         initialScrollIndex={initialDateIndex}
         viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
-        testID={testID}
+        testID={`${testID}.list`}
         onLayout={onLayout}
         removeClippedSubviews={removeClippedSubviews}
         pagingEnabled={pagingEnabled}

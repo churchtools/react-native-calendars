@@ -5,6 +5,8 @@ yarn.lock
 .vscode
 package-lock.json
 
+bin/updateCT.js
+
 # OSX
 #
 .DS_Store
@@ -67,4 +69,4 @@ ios/Podfile.lock
 /vendor/bundle/
 
 .eslintcache
-.reassure 
+.reassure

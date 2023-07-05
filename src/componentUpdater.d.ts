@@ -162,10 +162,10 @@ export declare function extractCalendarProps(props: CalendarListProps): {
     onMagicTap?: (() => void) | undefined;
     accessibilityIgnoresInvertColors?: boolean | undefined;
     ItemSeparatorComponent?: import("react").ComponentType<any> | null | undefined;
-    ListEmptyComponent?: import("react").ComponentType<any> | import("react").ReactElement<any, string | import("react").JSXElementConstructor<any>> | null | undefined;
-    ListFooterComponent?: import("react").ComponentType<any> | import("react").ReactElement<any, string | import("react").JSXElementConstructor<any>> | null | undefined;
+    ListEmptyComponent?: import("react").ComponentType<any> | import("react").ReactElement<unknown, string | import("react").JSXElementConstructor<any>> | null | undefined;
+    ListFooterComponent?: import("react").ComponentType<any> | import("react").ReactElement<unknown, string | import("react").JSXElementConstructor<any>> | null | undefined;
     ListFooterComponentStyle?: import("react-native").StyleProp<import("react-native").ViewStyle>;
-    ListHeaderComponent?: import("react").ComponentType<any> | import("react").ReactElement<any, string | import("react").JSXElementConstructor<any>> | null | undefined;
+    ListHeaderComponent?: import("react").ComponentType<any> | import("react").ReactElement<unknown, string | import("react").JSXElementConstructor<any>> | null | undefined;
     ListHeaderComponentStyle?: import("react-native").StyleProp<import("react-native").ViewStyle>;
     columnWrapperStyle?: import("react-native").StyleProp<import("react-native").ViewStyle>;
     extraData?: any;
@@ -366,10 +366,10 @@ export declare function extractCalendarListProps(props: AgendaProps): {
     accessibilityIgnoresInvertColors?: boolean | undefined;
     horizontal?: boolean | null | undefined;
     ItemSeparatorComponent?: import("react").ComponentType<any> | null | undefined;
-    ListEmptyComponent?: import("react").ComponentType<any> | import("react").ReactElement<any, string | import("react").JSXElementConstructor<any>> | null | undefined;
-    ListFooterComponent?: import("react").ComponentType<any> | import("react").ReactElement<any, string | import("react").JSXElementConstructor<any>> | null | undefined;
+    ListEmptyComponent?: import("react").ComponentType<any> | import("react").ReactElement<unknown, string | import("react").JSXElementConstructor<any>> | null | undefined;
+    ListFooterComponent?: import("react").ComponentType<any> | import("react").ReactElement<unknown, string | import("react").JSXElementConstructor<any>> | null | undefined;
     ListFooterComponentStyle?: import("react-native").StyleProp<import("react-native").ViewStyle>;
-    ListHeaderComponent?: import("react").ComponentType<any> | import("react").ReactElement<any, string | import("react").JSXElementConstructor<any>> | null | undefined;
+    ListHeaderComponent?: import("react").ComponentType<any> | import("react").ReactElement<unknown, string | import("react").JSXElementConstructor<any>> | null | undefined;
     ListHeaderComponentStyle?: import("react-native").StyleProp<import("react-native").ViewStyle>;
     columnWrapperStyle?: import("react-native").StyleProp<import("react-native").ViewStyle>;
     keyboardShouldPersistTaps?: boolean | "never" | "always" | "handled" | undefined;
@@ -491,6 +491,7 @@ export declare function extractReservationListProps(props: AgendaProps): {
     hideEmptyDays: boolean | undefined;
     date: (string & import("xdate")) | undefined;
     item: import("./types").AgendaEntry | undefined;
+    theme: import("./types").Theme | undefined;
     rowHasChanged: ((a: import("./types").AgendaEntry, b: import("./types").AgendaEntry) => boolean) | undefined;
     renderDay: ((date?: import("xdate") | undefined, item?: import("./types").AgendaEntry | undefined) => JSX.Element | import("react").Component<{}, {}, any>) | undefined;
     renderItem: ((reservation: import("./types").AgendaEntry, isFirst: boolean) => JSX.Element | import("react").Component<{}, {}, any>) | undefined;
