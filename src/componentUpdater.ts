@@ -236,9 +236,11 @@ export function extractReservationListProps(props: AgendaProps) {
     renderDay,
     renderItem,
     renderEmptyDate,
+      onViewableItemsChanged,
   } = props;
 
   const ReservationListProps = {
+    onViewableItemsChanged,
     // ReservationList props
     items,
     selectedDay,

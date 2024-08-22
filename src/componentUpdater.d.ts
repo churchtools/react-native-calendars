@@ -473,6 +473,10 @@ export declare function extractCalendarListProps(props: AgendaProps): {
     renderList?: ((listProps: ReservationListProps) => JSX.Element) | undefined;
 };
 export declare function extractReservationListProps(props: AgendaProps): {
+    onViewableItemsChanged: ((info: {
+        viewableItems: import("react-native").ViewToken[];
+        changed: import("react-native").ViewToken[];
+    }) => void) | null | undefined;
     items: import("./types").AgendaSchedule | undefined;
     selectedDay: import("xdate") | undefined;
     topDay: import("xdate") | undefined;
