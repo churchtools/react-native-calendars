@@ -29,6 +29,7 @@ DerivedData
 *.hmap
 *.ipa
 *.xcuserstate
+ios/.xcode.env.local
 # project.xcworkspace
 
 # Android/IntelliJ
@@ -39,18 +40,15 @@ build/
 local.properties
 *.iml
 *.hprof
+.cxx/
+*.keystore
+!debug.keystore
 
 # node.js
 #
 node_modules/
 npm-debug.log
 yarn-error.log
-
-# BUCK
-buck-out/
-\.buckd/
-*.keystore
-!debug.keystore
 
 # fastlane
 #
@@ -59,9 +57,10 @@ buck-out/
 # For more information about the recommended setup visit:
 # https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Gitignore.md
 
-fastlane/report.xml
-fastlane/Preview.html
-fastlane/screenshots
+**/fastlane/report.xml
+**/fastlane/Preview.html
+**/fastlane/screenshots
+**/fastlane/test_output
 
 # Ruby / CocoaPods
 ios/Pods
@@ -70,3 +69,6 @@ ios/Podfile.lock
 
 .eslintcache
 .reassure
+
+# Temporary files created by Metro to check the health of the file watcher
+.metro-health-check*

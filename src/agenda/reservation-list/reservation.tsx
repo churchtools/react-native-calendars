@@ -7,7 +7,6 @@ import {View, Text} from 'react-native';
 
 import {isToday} from '../../dateutils';
 import {getDefaultLocale} from '../../services';
-// @ts-expect-error
 import {RESERVATION_DATE} from '../../testIDs';
 import styleConstructor from './style';
 import {Theme, AgendaEntry} from '../../types';
@@ -74,50 +73,51 @@ class Reservation extends Component<ReservationProps> {
         return changed;
     }
 
-    renderDate(date?: XDate, item?: AgendaEntry) {
-        if (isFunction(this.props.renderDay)) {
-            return this.props.renderDay(date, item);
-        }
+  renderDate() {
+    const {item, date, renderDay} = this.props;
+
+    if (isFunction(renderDay)) {
+      return renderDay(date, item);
+    }
 
         const today = date && isToday(date) ? this.style.today : undefined;
         const dayNames = getDefaultLocale().dayNamesShort;
 
-        if (date) {
-            return (
-                <View style={this.style.day} testID={RESERVATION_DATE}>
-                    <Text allowFontScaling={false} style={[this.style.dayNum, today]}>
-                        {date.getDate()}
-                    </Text>
-                    <Text allowFontScaling={false} style={[this.style.dayText, today]}>
-                        {dayNames ? dayNames[date.getDay()] : undefined}
-                    </Text>
-                </View>
-            );
-        } else {
-            return <View style={this.style.day}/>;
-        }
+    if (date) {
+      return (
+        <View style={this.style.day} testID={RESERVATION_DATE}>
+          <Text allowFontScaling={false} style={[this.style.dayNum, today]}>
+            {date.getDate()}
+          </Text>
+          <Text allowFontScaling={false} style={[this.style.dayText, today]}>
+            {dayNames ? dayNames[date.getDay()] : undefined}
+          </Text>
+        </View>
+      );
+    }
+    return <View style={this.style.day}/>;
+  }
+
+  render() {
+    const {item, date, renderItem, renderEmptyDate} = this.props;
+
+    let content;
+    if (item) {
+      const firstItem = date ? true : false;
+      if (isFunction(renderItem)) {
+        content = renderItem(item, firstItem);
+      }
+    } else if (isFunction(renderEmptyDate)) {
+      content = renderEmptyDate(date);
     }
 
-    render() {
-        const {item, date} = this.props;
-
-        let content;
-        if (item) {
-            const firstItem = date ? true : false;
-            if (isFunction(this.props.renderItem)) {
-                content = this.props.renderItem(item, firstItem);
-            }
-        } else if (isFunction(this.props.renderEmptyDate)) {
-            content = this.props.renderEmptyDate(date);
-        }
-
-        return (
-            <View style={this.style.container}>
-                {this.renderDate(date, item)}
-                <View style={this.style.innerContainer}>{content}</View>
-            </View>
-        );
-    }
+    return (
+      <View style={this.style.container}>
+        {this.renderDate()}
+        <View style={this.style.innerContainer}>{content}</View>
+      </View>
+    );
+  }
 }
 
 export default Reservation;

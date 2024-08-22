@@ -15,8 +15,8 @@ import React, {
 } from 'react';
 import {FlatList, View, ViewStyle, FlatListProps} from 'react-native';
 
-import {extractHeaderProps, extractCalendarProps} from '../componentUpdater';
-import {xdateToData, parseDate, toMarkingFormat} from '../interface';
+import {extractCalendarProps, extractHeaderProps} from '../componentUpdater';
+import {parseDate, toMarkingFormat, xdateToData} from '../interface';
 import {page, sameDate, sameMonth} from '../dateutils';
 import constants from '../commons/constants';
 import {ContextProp} from '../types';
@@ -25,6 +25,7 @@ import styleConstructor from './style';
 import Calendar, {CalendarProps} from '../calendar';
 import CalendarListItem from './item';
 import CalendarHeader from '../calendar/header/index';
+import isEqual from 'lodash/isEqual';
 
 const CALENDAR_WIDTH = constants.screenWidth;
 const CALENDAR_HEIGHT = 360;
@@ -124,14 +125,16 @@ const CalendarList = (props: CalendarListProps & ContextProp, ref: any) => {
 
   const [currentMonth, setCurrentMonth] = useState(parseDate(current));
 
+  const shouldUseAndroidRTLFix = useMemo(() => constants.isAndroidRTL && horizontal, [horizontal]);
+
   const style = useRef(styleConstructor(theme));
   const list = useRef();
   const range = useRef(horizontal ? 1 : 3);
   const initialDate = useRef(parseDate(current) || new XDate());
   const visibleMonth = useRef(currentMonth);
 
-  const items = useMemo(() => {
-    const months = [];
+  const items: XDate[] = useMemo(() => {
+    const months: any[] = [];
     for (let i = 0; i <= pastScrollRange + futureScrollRange; i++) {
       const rangeDate = initialDate.current?.clone().addMonths(i - pastScrollRange, true);
       months.push(rangeDate);
@@ -200,13 +203,13 @@ const CalendarList = (props: CalendarListProps & ContextProp, ref: any) => {
   const scrollToMonth = useCallback((date: XDate | string) => {
     const scrollTo = parseDate(date);
     const diffMonths = Math.round(initialDate?.current?.clone().setDate(1).diffMonths(scrollTo?.clone().setDate(1)));
-    const scrollAmount = calendarSize * pastScrollRange + diffMonths * calendarSize;
+    const scrollAmount = calendarSize * (shouldUseAndroidRTLFix ? pastScrollRange - diffMonths : pastScrollRange + diffMonths);
 
     if (scrollAmount !== 0) {
       // @ts-expect-error
       list?.current?.scrollToOffset({offset: scrollAmount, animated: animateScroll});
     }
-  }, [calendarSize]);
+  }, [calendarSize, shouldUseAndroidRTLFix, pastScrollRange, animateScroll]);
 
   const addMonth = useCallback((count: number) => {
     const day = currentMonth?.clone().addMonths(count, true);
@@ -290,11 +293,18 @@ const CalendarList = (props: CalendarListProps & ContextProp, ref: any) => {
 
   const onViewableItemsChanged = useCallback(({viewableItems}: any) => {
     const newVisibleMonth = parseDate(viewableItems[0]?.item);
-    if (!sameDate(visibleMonth?.current, newVisibleMonth)) {
-      visibleMonth.current = newVisibleMonth;
+    if (shouldUseAndroidRTLFix) {
+      const centerIndex = items.findIndex((item) => isEqual(parseDate(current), item));
+      const adjustedOffset = centerIndex - items.findIndex((item) => isEqual(newVisibleMonth, item));
+      visibleMonth.current = items[centerIndex + adjustedOffset];
       setCurrentMonth(visibleMonth.current);
+    } else {
+      if (!sameDate(visibleMonth?.current, newVisibleMonth)) {
+        visibleMonth.current = newVisibleMonth;
+        setCurrentMonth(visibleMonth.current);
+      }
     }
-  }, []);
+  }, [items, shouldUseAndroidRTLFix, current]);
 
   const viewabilityConfigCallbackPairs = useRef([
     {
@@ -308,6 +318,7 @@ const CalendarList = (props: CalendarListProps & ContextProp, ref: any) => {
       <FlatList
         // @ts-expect-error
         ref={list}
+        windowSize={shouldUseAndroidRTLFix ? pastScrollRange + futureScrollRange + 1 : undefined}
         style={listStyle}
         showsVerticalScrollIndicator={showScrollIndicator}
         showsHorizontalScrollIndicator={showScrollIndicator}
