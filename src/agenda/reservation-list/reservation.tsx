@@ -2,7 +2,7 @@ import isFunction from 'lodash/isFunction';
 import PropTypes from 'prop-types';
 import XDate from 'xdate';
 
-import React, {Component} from 'react';
+import React, { Component, ReactNode } from 'react';
 import {View, Text} from 'react-native';
 
 import {isToday} from '../../dateutils';
@@ -113,7 +113,7 @@ class Reservation extends Component<ReservationProps> {
 
     return (
       <View style={this.style.container}>
-        {this.renderDate()}
+        {this.renderDate() as ReactNode}
         <View style={this.style.innerContainer}>{content}</View>
       </View>
     );

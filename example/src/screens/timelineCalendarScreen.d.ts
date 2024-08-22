@@ -13,7 +13,7 @@ export default class TimelineCalendarScreen extends Component {
             marked: boolean;
         };
     };
-    onDateChanged: (date: string) => void;
+    onDateChanged: (date: string, source: string) => void;
     onMonthChange: (month: any, updateSource: any) => void;
     createNewEvent: TimelineProps['onBackgroundLongPress'];
     approveNewEvent: TimelineProps['onBackgroundLongPressOut'];

@@ -1,5 +1,4 @@
 import {fireEvent, render, screen, within} from '@testing-library/react-native';
-//@ts-expect-error
 import {getMonthTitle} from '../testUtils';
 export class CalendarListDriver {
   testID;

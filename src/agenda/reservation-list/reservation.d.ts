@@ -30,7 +30,7 @@ declare class Reservation extends Component<ReservationProps> {
     style: any;
     constructor(props: ReservationProps);
     shouldComponentUpdate(nextProps: ReservationProps): boolean;
-    renderDate(date?: XDate, item?: AgendaEntry): React.JSX.Element | React.Component<{}, {}, any>;
+    renderDate(): React.JSX.Element | React.Component<{}, {}, any>;
     render(): React.JSX.Element;
 }
 export default Reservation;

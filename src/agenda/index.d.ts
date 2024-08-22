@@ -5,7 +5,7 @@ import { Animated, ViewStyle, LayoutChangeEvent, NativeSyntheticEvent, NativeScr
 import { DateData, AgendaSchedule } from '../types';
 import { CalendarListProps } from '../calendar-list';
 import ReservationList, { ReservationListProps } from './reservation-list';
-export type AgendaProps = CalendarListProps & ReservationListProps & {
+export declare type AgendaProps = CalendarListProps & ReservationListProps & {
     /** the list of items that have to be displayed in agenda. If you want to render item as empty date
      the value of date key kas to be an empty array []. If there exists no value for date key it is
      considered that the date in question is not yet loaded */
@@ -27,7 +27,7 @@ export type AgendaProps = CalendarListProps & ReservationListProps & {
     /** Whether the knob should always be visible (when hideKnob = false) */
     showClosingKnob?: boolean;
 };
-type State = {
+declare type State = {
     scrollY: Animated.Value;
     calendarIsReady: boolean;
     calendarScrollable: boolean;
@@ -122,7 +122,7 @@ export default class Agenda extends Component<AgendaProps, State> {
         webAriaLevel?: React.Validator<number | null | undefined> | undefined;
         testID?: React.Validator<string | null | undefined> | undefined;
         accessibilityElementsHidden?: React.Validator<boolean | null | undefined> | undefined;
-        importantForAccessibility?: React.Validator<"auto" | "no" | "yes" | "no-hide-descendants" | null | undefined> | undefined;
+        importantForAccessibility?: React.Validator<"auto" | "yes" | "no" | "no-hide-descendants" | null | undefined> | undefined;
         numberOfDays?: React.Validator<number | null | undefined> | undefined;
         timelineLeftInset?: React.Validator<number | null | undefined> | undefined;
         dayComponent?: React.Validator<React.ComponentType<import("../calendar/day").DayProps & {
@@ -138,6 +138,7 @@ export default class Agenda extends Component<AgendaProps, State> {
         accessibilityLabel?: React.Validator<string | null | undefined> | undefined;
         children?: React.Validator<React.ReactNode> | undefined;
         hitSlop?: React.Validator<import("react-native").Insets | null | undefined> | undefined;
+        id?: React.Validator<string | null | undefined> | undefined;
         onLayout?: React.Validator<((event: LayoutChangeEvent) => void) | null | undefined> | undefined;
         pointerEvents?: React.Validator<"auto" | "none" | "box-none" | "box-only" | null | undefined> | undefined;
         removeClippedSubviews?: React.Validator<boolean | null | undefined> | undefined;
@@ -171,29 +172,52 @@ export default class Agenda extends Component<AgendaProps, State> {
         onTouchEnd?: React.Validator<((event: import("react-native").GestureResponderEvent) => void) | null | undefined> | undefined;
         onTouchCancel?: React.Validator<((event: import("react-native").GestureResponderEvent) => void) | null | undefined> | undefined;
         onTouchEndCapture?: React.Validator<((event: import("react-native").GestureResponderEvent) => void) | null | undefined> | undefined;
+        onPointerEnter?: React.Validator<((event: import("react-native").PointerEvent) => void) | null | undefined> | undefined;
+        onPointerEnterCapture?: React.Validator<((event: import("react-native").PointerEvent) => void) | null | undefined> | undefined;
+        onPointerLeave?: React.Validator<((event: import("react-native").PointerEvent) => void) | null | undefined> | undefined;
+        onPointerLeaveCapture?: React.Validator<((event: import("react-native").PointerEvent) => void) | null | undefined> | undefined;
+        onPointerMove?: React.Validator<((event: import("react-native").PointerEvent) => void) | null | undefined> | undefined;
+        onPointerMoveCapture?: React.Validator<((event: import("react-native").PointerEvent) => void) | null | undefined> | undefined;
+        onPointerCancel?: React.Validator<((event: import("react-native").PointerEvent) => void) | null | undefined> | undefined;
+        onPointerCancelCapture?: React.Validator<((event: import("react-native").PointerEvent) => void) | null | undefined> | undefined;
+        onPointerDown?: React.Validator<((event: import("react-native").PointerEvent) => void) | null | undefined> | undefined;
+        onPointerDownCapture?: React.Validator<((event: import("react-native").PointerEvent) => void) | null | undefined> | undefined;
+        onPointerUp?: React.Validator<((event: import("react-native").PointerEvent) => void) | null | undefined> | undefined;
+        onPointerUpCapture?: React.Validator<((event: import("react-native").PointerEvent) => void) | null | undefined> | undefined;
         accessible?: React.Validator<boolean | null | undefined> | undefined;
         accessibilityActions?: React.Validator<readonly Readonly<{
             name: string;
             label?: string | undefined;
         }>[] | null | undefined> | undefined;
+        'aria-label'?: React.Validator<string | null | undefined> | undefined;
         accessibilityRole?: React.Validator<import("react-native").AccessibilityRole | null | undefined> | undefined;
         accessibilityState?: React.Validator<import("react-native").AccessibilityState | null | undefined> | undefined;
+        'aria-busy'?: React.Validator<boolean | null | undefined> | undefined;
+        'aria-checked'?: React.Validator<boolean | "mixed" | null | undefined> | undefined;
+        'aria-disabled'?: React.Validator<boolean | null | undefined> | undefined;
+        'aria-expanded'?: React.Validator<boolean | null | undefined> | undefined;
+        'aria-selected'?: React.Validator<boolean | null | undefined> | undefined;
+        'aria-labelledby'?: React.Validator<string | null | undefined> | undefined;
         accessibilityHint?: React.Validator<string | null | undefined> | undefined;
         accessibilityValue?: React.Validator<import("react-native").AccessibilityValue | null | undefined> | undefined;
+        'aria-valuemax'?: React.Validator<number | null | undefined> | undefined;
+        'aria-valuemin'?: React.Validator<number | null | undefined> | undefined;
+        'aria-valuenow'?: React.Validator<number | null | undefined> | undefined;
+        'aria-valuetext'?: React.Validator<string | null | undefined> | undefined;
         onAccessibilityAction?: React.Validator<((event: import("react-native").AccessibilityActionEvent) => void) | null | undefined> | undefined;
+        'aria-hidden'?: React.Validator<boolean | null | undefined> | undefined;
+        'aria-live'?: React.Validator<"polite" | "assertive" | "off" | null | undefined> | undefined;
+        'aria-modal'?: React.Validator<boolean | null | undefined> | undefined;
+        role?: React.Validator<import("react-native").Role | null | undefined> | undefined;
         accessibilityLiveRegion?: React.Validator<"none" | "polite" | "assertive" | null | undefined> | undefined;
+        accessibilityLabelledBy?: React.Validator<string | string[] | null | undefined> | undefined;
         accessibilityViewIsModal?: React.Validator<boolean | null | undefined> | undefined;
         onAccessibilityEscape?: React.Validator<(() => void) | null | undefined> | undefined;
         onAccessibilityTap?: React.Validator<(() => void) | null | undefined> | undefined;
         onMagicTap?: React.Validator<(() => void) | null | undefined> | undefined;
         accessibilityIgnoresInvertColors?: React.Validator<boolean | null | undefined> | undefined;
+        accessibilityLanguage?: React.Validator<string | null | undefined> | undefined;
         horizontal?: React.Validator<boolean | null | undefined> | undefined;
-        ItemSeparatorComponent?: React.Validator<React.ComponentType<any> | null | undefined> | undefined;
-        ListEmptyComponent?: React.Validator<React.ComponentType<any> | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | null | undefined> | undefined;
-        ListFooterComponent?: React.Validator<React.ComponentType<any> | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | null | undefined> | undefined;
-        ListFooterComponentStyle?: React.Validator<import("react-native").StyleProp<ViewStyle>> | undefined;
-        ListHeaderComponent?: React.Validator<React.ComponentType<any> | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | null | undefined> | undefined;
-        ListHeaderComponentStyle?: React.Validator<import("react-native").StyleProp<ViewStyle>> | undefined;
         columnWrapperStyle?: React.Validator<import("react-native").StyleProp<ViewStyle>> | undefined;
         keyboardShouldPersistTaps?: React.Validator<boolean | "never" | "always" | "handled" | null | undefined> | undefined;
         extraData?: React.Validator<any> | undefined;
@@ -213,12 +237,17 @@ export default class Agenda extends Component<AgendaProps, State> {
         onEndReachedThreshold?: React.Validator<number | null | undefined> | undefined;
         viewabilityConfig?: React.Validator<any> | undefined;
         fadingEdgeLength?: React.Validator<number | null | undefined> | undefined;
+        ItemSeparatorComponent?: React.Validator<React.ComponentType<any> | null | undefined> | undefined;
+        ListEmptyComponent?: React.Validator<React.ComponentType<any> | React.ReactElement<any, string | React.JSXElementConstructor<any>> | null | undefined> | undefined;
+        ListFooterComponent?: React.Validator<React.ComponentType<any> | React.ReactElement<any, string | React.JSXElementConstructor<any>> | null | undefined> | undefined;
+        ListFooterComponentStyle?: React.Validator<import("react-native").StyleProp<ViewStyle>> | undefined;
+        ListHeaderComponent?: React.Validator<React.ComponentType<any> | React.ReactElement<any, string | React.JSXElementConstructor<any>> | null | undefined> | undefined;
+        ListHeaderComponentStyle?: React.Validator<import("react-native").StyleProp<ViewStyle>> | undefined;
         debug?: React.Validator<boolean | null | undefined> | undefined;
         disableVirtualization?: React.Validator<boolean | null | undefined> | undefined;
         getItem?: React.Validator<((data: any, index: number) => any) | null | undefined> | undefined;
         getItemCount?: React.Validator<((data: any) => number) | null | undefined> | undefined;
         inverted?: React.Validator<boolean | null | undefined> | undefined;
-        listKey?: React.Validator<string | null | undefined> | undefined;
         maxToRenderPerBatch?: React.Validator<number | null | undefined> | undefined;
         onScrollToIndexFailed?: React.Validator<((info: {
             index: number;
@@ -240,6 +269,7 @@ export default class Agenda extends Component<AgendaProps, State> {
         scrollEnabled?: React.Validator<boolean | null | undefined> | undefined;
         showsHorizontalScrollIndicator?: React.Validator<boolean | null | undefined> | undefined;
         showsVerticalScrollIndicator?: React.Validator<boolean | null | undefined> | undefined;
+        stickyHeaderHiddenOnScroll?: React.Validator<boolean | null | undefined> | undefined;
         snapToInterval?: React.Validator<number | null | undefined> | undefined;
         snapToOffsets?: React.Validator<number[] | null | undefined> | undefined;
         snapToStart?: React.Validator<boolean | null | undefined> | undefined;
@@ -247,15 +277,18 @@ export default class Agenda extends Component<AgendaProps, State> {
         stickyHeaderIndices?: React.Validator<number[] | null | undefined> | undefined;
         disableIntervalMomentum?: React.Validator<boolean | null | undefined> | undefined;
         disableScrollViewPanResponder?: React.Validator<boolean | null | undefined> | undefined;
+        StickyHeaderComponent?: React.Validator<React.ComponentType<any> | null | undefined> | undefined;
         alwaysBounceHorizontal?: React.Validator<boolean | null | undefined> | undefined;
         alwaysBounceVertical?: React.Validator<boolean | null | undefined> | undefined;
         automaticallyAdjustContentInsets?: React.Validator<boolean | null | undefined> | undefined;
+        automaticallyAdjustKeyboardInsets?: React.Validator<boolean | null | undefined> | undefined;
+        automaticallyAdjustsScrollIndicatorInsets?: React.Validator<boolean | null | undefined> | undefined;
         bounces?: React.Validator<boolean | null | undefined> | undefined;
         bouncesZoom?: React.Validator<boolean | null | undefined> | undefined;
         canCancelContentTouches?: React.Validator<boolean | null | undefined> | undefined;
         centerContent?: React.Validator<boolean | null | undefined> | undefined;
         contentInset?: React.Validator<import("react-native").Insets | null | undefined> | undefined;
-        contentOffset?: React.Validator<import("react-native").PointPropType | null | undefined> | undefined;
+        contentOffset?: React.Validator<import("react-native").PointProp | null | undefined> | undefined;
         contentInsetAdjustmentBehavior?: React.Validator<"never" | "always" | "automatic" | "scrollableAxes" | null | undefined> | undefined;
         directionalLockEnabled?: React.Validator<boolean | null | undefined> | undefined;
         indicatorStyle?: React.Validator<"white" | "default" | "black" | null | undefined> | undefined;

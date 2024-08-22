@@ -203,8 +203,10 @@ const ExpandableCalendar = props => {
     if (AccessibilityInfo) {
       if (AccessibilityInfo.isScreenReaderEnabled) {
         AccessibilityInfo.isScreenReaderEnabled().then(handleScreenReaderStatus);
+        //@ts-expect-error
       } else if (AccessibilityInfo.fetch) {
         // Support for older RN versions
+        //@ts-expect-error
         AccessibilityInfo.fetch().then(handleScreenReaderStatus);
       }
     }

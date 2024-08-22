@@ -20,7 +20,8 @@ const TimelineHours = props => {
     onBackgroundLongPressOut,
     width,
     numberOfDays = 1,
-    timelineLeftInset = 0
+    timelineLeftInset = 0,
+    testID
   } = props;
   const lastLongPressEventTime = useRef();
   // const offset = this.calendarHeight / (end - start);
@@ -92,6 +93,7 @@ const TimelineHours = props => {
             {time === start ? null : (
               <View
                 key={`line${time}`}
+                testID={`${testID}.${time}.line`}
                 style={[
                   styles.line,
                   {top: offset * index, width: dimensionWidth - EVENT_DIFF, left: timelineLeftInset - 16}
@@ -101,6 +103,7 @@ const TimelineHours = props => {
             {
               <View
                 key={`lineHalf${time}`}
+                testID={`${testID}.${time}.lineHalf`}
                 style={[
                   styles.line,
                   {top: offset * (index + 0.5), width: dimensionWidth - EVENT_DIFF, left: timelineLeftInset - 16}

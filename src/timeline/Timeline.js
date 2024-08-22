@@ -38,7 +38,8 @@ const Timeline = props => {
     unavailableHoursColor,
     eventTapped,
     numberOfDays = 1,
-    timelineLeftInset = 0
+    timelineLeftInset = 0,
+    testID
   } = props;
   const pageDates = useMemo(() => {
     return typeof date === 'string' ? [date] : date;
@@ -140,6 +141,7 @@ const Timeline = props => {
       contentContainerStyle={[styles.current.contentStyle, {width: constants.screenWidth}]}
       showsVerticalScrollIndicator={false}
       {...scrollEvents}
+      testID={testID}
     >
       <TimelineHours
         start={start}
@@ -154,6 +156,7 @@ const Timeline = props => {
         width={width}
         numberOfDays={numberOfDays}
         timelineLeftInset={timelineLeftInset}
+        testID={`${testID}.hours`}
       />
       {times(numberOfDays, renderTimelineDay)}
     </ScrollView>

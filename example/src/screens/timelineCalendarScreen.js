@@ -20,7 +20,8 @@ export default class TimelineCalendarScreen extends Component {
     [`${getDate(2)}`]: {marked: true},
     [`${getDate(4)}`]: {marked: true}
   };
-  onDateChanged = date => {
+  onDateChanged = (date, source) => {
+    console.log('TimelineCalendarScreen onDateChanged: ', date, source);
     this.setState({currentDate: date});
   };
   onMonthChange = (month, updateSource) => {

@@ -13,7 +13,6 @@ import CalendarContext from '../Context';
 import {useDidUpdate} from '../../hooks';
 export const NUMBER_OF_PAGES = 6;
 const NUM_OF_ITEMS = NUMBER_OF_PAGES * 2 + 1; // NUMBER_OF_PAGES before + NUMBER_OF_PAGES after + current
-const APPLY_ANDROID_FIX = constants.isAndroid && constants.isRTL;
 /**
  * @description: Week calendar component
  * @note: Should be wrapped with 'CalendarProvider'
@@ -51,14 +50,15 @@ const WeekCalendar = props => {
           : sameWeek(item, date, firstDay)
       );
       if (pageIndex !== currentIndex.current) {
+        const adjustedIndexFrScroll = constants.isAndroidRTL ? NUM_OF_ITEMS - 1 - pageIndex : pageIndex;
         if (pageIndex >= 0) {
-          visibleWeek.current = items.current[pageIndex];
-          currentIndex.current = pageIndex;
+          visibleWeek.current = items.current[adjustedIndexFrScroll];
+          currentIndex.current = adjustedIndexFrScroll;
         } else {
           visibleWeek.current = date;
           currentIndex.current = NUMBER_OF_PAGES;
         }
-        pageIndex <= 0 ? onEndReached() : list?.current?.scrollToIndex({index: pageIndex, animated: false});
+        pageIndex <= 0 ? onEndReached() : list?.current?.scrollToIndex({index: adjustedIndexFrScroll, animated: false});
       }
     }
   }, [date, updateSource]);
@@ -147,7 +147,7 @@ const WeekCalendar = props => {
       const currItems = items.current;
       const newDate = viewableItems[0]?.item;
       if (newDate !== visibleWeek.current) {
-        if (APPLY_ANDROID_FIX) {
+        if (constants.isAndroidRTL) {
           //in android RTL the item we see is the one in the opposite direction
           const newDateOffset = -1 * (NUMBER_OF_PAGES - currItems.indexOf(newDate));
           const adjustedNewDate = currItems[NUMBER_OF_PAGES - newDateOffset];

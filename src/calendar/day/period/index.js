@@ -55,15 +55,15 @@ const PeriodDay = React.memo(props => {
         borderRadius: 17,
         overflow: 'hidden'
       });
-      if (markingStyle.containerStyle) {
-        containerStyle.push(markingStyle.containerStyle);
-      }
       const start = markingStyle.startingDay;
       const end = markingStyle.endingDay;
       if (start && !end) {
         containerStyle.push({backgroundColor: markingStyle.startingDay?.backgroundColor});
       } else if ((end && !start) || (end && start)) {
         containerStyle.push({backgroundColor: markingStyle.endingDay?.backgroundColor});
+      }
+      if (markingStyle.containerStyle) {
+        containerStyle.push(markingStyle.containerStyle);
       }
     }
     return containerStyle;
